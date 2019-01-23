@@ -3,3 +3,4 @@ out/
 *.class
 workspace.xml
 .idea
+!/.idea/workspace.xml
