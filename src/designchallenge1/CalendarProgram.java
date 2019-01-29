@@ -101,7 +101,23 @@ public class CalendarProgram{
                     public void mouseClicked(MouseEvent evt)  
                     {  
                         int col = calendarTable.getSelectedColumn();  
-                        int row = calendarTable.getSelectedRow();  
+                        int row = calendarTable.getSelectedRow();
+                        // Get the day
+						GregorianCalendar cal = new GregorianCalendar(yearToday, monthToday, 1);
+						int nod = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+						int som = cal.get(GregorianCalendar.DAY_OF_WEEK);
+						int day;
+						boolean found = false;
+						for (day = 1; day <= nod && !found; day++)
+						{
+							int calcRow = new Integer((day+som-2)/7);
+							int calcColumn = (day+som-2)%7;
+
+							if (calcRow == row && calcColumn == col)
+								found = true;
+						}
+
+
                     }
                 });
                 
@@ -165,7 +181,7 @@ public class CalendarProgram{
 		
 		refreshCalendar (monthBound, yearBound); //Refresh calendar
 	}
-	
+
 
 	class btnPrev_Action implements ActionListener
         {
