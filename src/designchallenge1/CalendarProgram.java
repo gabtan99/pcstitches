@@ -10,6 +10,7 @@ package designchallenge1;
  */
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
@@ -122,7 +123,10 @@ public class CalendarProgram{
 							if (calcRow == row && calcColumn == col)
 								found = true;
 						}
+                        day--;
+						ViewEvents popup = new ViewEvents(day);
 						// NEW CODE--------------------------------------------------------------------
+
 
                     }
                 });
@@ -188,7 +192,6 @@ public class CalendarProgram{
 		refreshCalendar (monthBound, yearBound); //Refresh calendar
 	}
 
-
 	class btnPrev_Action implements ActionListener
         {
 		public void actionPerformed (ActionEvent e)
@@ -234,5 +237,52 @@ public class CalendarProgram{
 		}
 	}
 
+    class ViewEvents{
+            public JFrame mainFrame;
+            public JPanel mainPanel;
+            public Container pane;
+            public JButton addButton, deleteButton;
+            public JScrollPane scrollList;
 
+            public ViewEvents(int day){
+                frmMain.setEnabled(false);
+                String dateHeader = "";
+                dateHeader = dateHeader.concat(monthLabel.getText()+ " " + day + ", " + yearToday);
+
+                mainFrame = new JFrame();
+                mainFrame.setSize(500, 550);
+                mainFrame.setTitle(dateHeader);
+                pane = mainFrame.getContentPane();
+                pane.setLayout(null);
+                mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                mainFrame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent event) {
+                        frmMain.setEnabled(true);
+                        mainFrame.dispose();
+                    }
+                });
+
+                addButton = new JButton("Add");
+                deleteButton = new JButton("Delete");
+
+
+
+                mainPanel = new JPanel(null);
+                TitledBorder title = BorderFactory.createTitledBorder("Events on This Day");
+                title.setTitleJustification(TitledBorder.CENTER);
+                mainPanel.setBorder(title);
+
+                pane.add(mainPanel);
+                mainPanel.add(addButton);
+
+
+                mainPanel.setBounds(10, 10, 465, 495);
+                addButton.setBounds(203, 430, 55,25);
+
+                mainFrame.setLocationRelativeTo(frmMain);
+                mainFrame.setVisible(true);
+                mainFrame.setResizable(false);
+            }
+    }
 }
