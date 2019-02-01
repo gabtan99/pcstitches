@@ -33,6 +33,9 @@ public class CalendarProgram{
         /**** Calendar Table Components ***/
 	public JTable calendarTable;
         public DefaultTableModel modelCalendarTable;
+
+        /**** Events stored in Calendar *****/
+        public ArrayList<EventsInterface> eventList;
         
         public void refreshCalendar(int month, int year)
         {
@@ -75,7 +78,8 @@ public class CalendarProgram{
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 }
 		catch (Exception e) {}
-                
+
+		eventList = new ArrayList<>();
 		frmMain = new JFrame ("Calendar Application");
                 frmMain.setSize(660, 750);
 		pane = frmMain.getContentPane();
@@ -102,7 +106,9 @@ public class CalendarProgram{
                     {  
                         int col = calendarTable.getSelectedColumn();  
                         int row = calendarTable.getSelectedRow();
-                        // Get the day
+
+                        // NEW CODE--------------------------------------------------------------------
+                        //Get the day
 						GregorianCalendar cal = new GregorianCalendar(yearToday, monthToday, 1);
 						int nod = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 						int som = cal.get(GregorianCalendar.DAY_OF_WEEK);
@@ -116,7 +122,7 @@ public class CalendarProgram{
 							if (calcRow == row && calcColumn == col)
 								found = true;
 						}
-
+						// NEW CODE--------------------------------------------------------------------
 
                     }
                 });
@@ -227,4 +233,6 @@ public class CalendarProgram{
 			}
 		}
 	}
+
+
 }
