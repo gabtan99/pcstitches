@@ -71,6 +71,12 @@ public class CSVReader {
                 e.setStartMonth(date[0]+1);
                 e.setStartDay(date[1]);
                 e.setStartYear(date[2]);
+
+	            e.setEndDay(date[0]+1);
+	            e.setEndDay(date[1]);
+	            e.setEndYear(date[2]);
+
+
                 e.setName(eventDetails[1]);
                 Color c = (Color) Color.class.getField(eventDetails[2].toUpperCase()).get(null);
                 e.setColor(c);
@@ -107,6 +113,10 @@ public class CSVReader {
                 e.setStartMonth(date[0]+1);
                 e.setStartDay(date[1]);
                 e.setStartYear(date[2]);
+
+                e.setEndDay(date[0]+1);
+	            e.setEndDay(date[1]);
+	            e.setEndYear(date[2]);
             
                 e.setName(eventDetails[0]);
                 Color c = (Color) Color.class.getField(eventDetails[2].toUpperCase()).get(null);
@@ -165,7 +175,9 @@ public class CSVReader {
 
             PreparedStatement addEvent = null;
 
-            String insertEvent = "INSERT INTO myevents (event_id, name, start_month, start_day, start_year, start_hour, start_minutes, rgbid) VALUES ("+ getNewEventID() +", ?, '"+ events.get(i).getStartMonth() +"', '"+ events.get(i).getStartDay() +"', '"+ events.get(i).getStartYear() +"', '"+ events.get(i).getStartHour() +"', '"+ events.get(i).getStartMinute()  +"', '"+ events.get(i).getColorRGB() +"')";
+            String insertEvent = "INSERT INTO myevents (event_id, name, start_month, start_day, start_year, start_hour, start_minutes, rgbid) VALUES ("+ getNewEventID() +", ?, '"
+		            + events.get(i).getStartMonth() +"', '"+ events.get(i).getStartDay() +"', '"+ events.get(i).getStartYear() +"', '"+ events.get(i).getStartHour() +"', '"
+		            + events.get(i).getStartMinute()  +"', '"+ events.get(i).getColorRGB() +"')";
 
             try {
                 addEvent = conn.prepareStatement(insertEvent);
