@@ -272,9 +272,6 @@ public class CalendarProgram{
                 modelEventsListTable = new DefaultTableModel();
                 eventsListTable = new JTable (modelEventsListTable);
                 scrollList = new JScrollPane(eventsListTable);
-				scrollList.setColumnHeaderView(null);
-
-
 
                 mainPanel = new JPanel(null);
                 TitledBorder title = BorderFactory.createTitledBorder("Events on This Day");
@@ -302,8 +299,7 @@ public class CalendarProgram{
 
 				eventsListTable.setRowHeight(20);
 				modelEventsListTable.setColumnCount(1);
-				ArrayList<String> test = new ArrayList<>();
-				modelEventsListTable.setRowCount(test.size());
+				modelEventsListTable.setRowCount(10);
 				eventsListTable.setDefaultRenderer(eventsListTable.getColumnClass(0), new ListRenderer());
             }
     }
