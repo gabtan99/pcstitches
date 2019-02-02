@@ -1,4 +1,4 @@
-package facebook;
+package designchallenge1;
 
 import java.awt.Color;
 
