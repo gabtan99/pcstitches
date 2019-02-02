@@ -38,3 +38,4 @@ gen
 .idea/misc.xml
 .idea/misc.xml
 src/.DS_Store
+*.xml

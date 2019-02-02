@@ -14,6 +14,8 @@ public class Event implements EventsInterface {
         endDate = Calendar.getInstance();
         setStartHour(0);
         setStartMinute(0);
+        setEndHour(23);
+        setEndMinute(59);
 
     }
 
