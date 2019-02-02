@@ -61,24 +61,24 @@ public class Event implements EventsInterface {
     }
 
     // Start Date Getters
-    public void getStartYear(){
-        this.startDate.get(Calendar.YEAR);
+    public int getStartYear(){
+        return this.startDate.get(Calendar.YEAR);
     }
 
-    public void getStartMonth(){
-        this.startDate.get(Calendar.MONTH);
+    public int getStartMonth(){
+        return this.startDate.get(Calendar.MONTH);
     }
 
-    public void getStartDay(){
-        this.startDate.get(Calendar.DAY_OF_MONTH);
+    public int getStartDay(){
+        return this.startDate.get(Calendar.DAY_OF_MONTH);
     }
 
-    public void getStartHour(){
-        this.startDate.get(Calendar.HOUR_OF_DAY);
+    public int getStartHour(){
+        return this.startDate.get(Calendar.HOUR_OF_DAY);
     }
 
-    public void getStartMinute(){
-        this.startDate.get(Calendar.MINUTE);
+    public int getStartMinute(){
+        return this.startDate.get(Calendar.MINUTE);
     }
 
     // End Date Setters
@@ -103,25 +103,28 @@ public class Event implements EventsInterface {
     }
 
     // End Date Getters
-    public void getEndYear(){
-        this.endDate.get(Calendar.YEAR);
+    public int getEndYear(){
+        return this.endDate.get(Calendar.YEAR);
     }
 
-    public void getEndMonth(){
-        this.endDate.get(Calendar.MONTH);
+    public int getEndMonth(){
+        return this.endDate.get(Calendar.MONTH);
     }
 
-    public void getEndDay(){
-        this.endDate.get(Calendar.DAY_OF_MONTH);
+    public int getEndDay(){
+        return this.endDate.get(Calendar.DAY_OF_MONTH);
     }
 
-    public void getEndHour(){
-        this.endDate.get(Calendar.HOUR_OF_DAY);
+    public int getEndHour(){
+        return this.endDate.get(Calendar.HOUR_OF_DAY);
     }
 
-    public void getEndMinute(){
-        this.endDate.get(Calendar.MINUTE);
+    public int getEndMinute(){
+        return this.endDate.get(Calendar.MINUTE);
     }
 
+    public String getString(int num) {
+        return Integer.toString(num);
+    }
 }
 

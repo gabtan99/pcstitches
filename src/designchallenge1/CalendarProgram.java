@@ -272,6 +272,7 @@ public class CalendarProgram{
                 modelEventsListTable = new DefaultTableModel();
                 eventsListTable = new JTable (modelEventsListTable);
                 scrollList = new JScrollPane(eventsListTable);
+				scrollList.setColumnHeaderView(null);
 
 
 
