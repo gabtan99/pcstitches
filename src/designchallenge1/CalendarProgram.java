@@ -244,6 +244,9 @@ public class CalendarProgram{
             public JButton addButton, deleteButton;
             public JScrollPane scrollList;
 
+            public DefaultTableModel modelEventsListTable;
+            public JTable eventsListTable;
+
             public ViewEvents(int day){
                 frmMain.setEnabled(false);
                 String dateHeader = "";
@@ -263,8 +266,12 @@ public class CalendarProgram{
                     }
                 });
 
-                addButton = new JButton("Add");
-                deleteButton = new JButton("Delete");
+				addButton = new JButton("Add");
+				deleteButton = new JButton("Delete");
+
+                modelEventsListTable = new DefaultTableModel();
+                eventsListTable = new JTable (modelEventsListTable);
+                scrollList = new JScrollPane(eventsListTable);
 
 
 
@@ -275,14 +282,28 @@ public class CalendarProgram{
 
                 pane.add(mainPanel);
                 mainPanel.add(addButton);
+                mainPanel.add(scrollList);
 
 
                 mainPanel.setBounds(10, 10, 465, 495);
                 addButton.setBounds(203, 430, 55,25);
+				scrollList.setBounds(132, 60, 200,340);
+
 
                 mainFrame.setLocationRelativeTo(frmMain);
                 mainFrame.setVisible(true);
                 mainFrame.setResizable(false);
+
+				eventsListTable.setColumnSelectionAllowed(true);
+				eventsListTable.setRowSelectionAllowed(true);
+				eventsListTable.setTableHeader(null);
+				eventsListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+				eventsListTable.setRowHeight(20);
+				modelEventsListTable.setColumnCount(1);
+				ArrayList<String> test = new ArrayList<>();
+				modelEventsListTable.setRowCount(test.size());
+				eventsListTable.setDefaultRenderer(eventsListTable.getColumnClass(0), new ListRenderer());
             }
     }
 }
