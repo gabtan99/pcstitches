@@ -6,12 +6,15 @@ import java.util.Calendar;
 public class Event implements EventsInterface {
     private String eventName;
     private Color eventColor;
-    private Calendar date;
+    private Calendar startDate, endDate;
+
 
     public Event(){
-        date = Calendar.getInstance();
-        this.setHour(0);
-        this.setMinute(0);
+        startDate = Calendar.getInstance();
+        endDate = Calendar.getInstance();
+        setStartHour(0);
+        setStartMinute(0);
+
     }
 
     // Getters
@@ -36,53 +39,93 @@ public class Event implements EventsInterface {
         this.eventName = eventName;
     }
 
-    // Date Setters
-    public void setYear(int year){
-        this.date.set(Calendar.YEAR, year);
+    // Start Date Setters
+    public void setStartYear(int year){
+        this.startDate.set(Calendar.YEAR, year);
     }
 
-    public void setMonth(int month){
-        this.date.set(Calendar.MONTH, month);
+    public void setStartMonth(int month){
+        this.startDate.set(Calendar.MONTH, month-1);
     }
 
-    public void setDay(int day){
-        this.date.set(Calendar.DAY_OF_MONTH, day);
+    public void setStartDay(int day){
+        this.startDate.set(Calendar.DAY_OF_MONTH, day);
     }
 
-    public void setHour(int hour){
-        this.date.set(Calendar.HOUR_OF_DAY, hour);
+    public void setStartHour(int hour){
+        this.startDate.set(Calendar.HOUR_OF_DAY, hour);
     }
 
-    public void setMinute(int minute){
-        this.date.set(Calendar.MINUTE, minute);
+    public void setStartMinute(int minute){
+        this.startDate.set(Calendar.MINUTE, minute);
     }
 
-    //Date Getters
-    public int getYear(){
-        return this.date.get(Calendar.YEAR);
+    // Start Date Getters
+    public int getStartYear(){
+        return this.startDate.get(Calendar.YEAR);
     }
 
-    public int getMonth(){
-        return this.date.get(Calendar.MONTH);
+    public int getStartMonth(){
+        return this.startDate.get(Calendar.MONTH);
     }
 
-    public int getDay(){
-        return this.date.get(Calendar.DAY_OF_MONTH);
+    public int getStartDay(){
+        return this.startDate.get(Calendar.DAY_OF_MONTH);
     }
 
-    public int getHour(){
-        return this.date.get(Calendar.HOUR_OF_DAY);
+    public int getStartHour(){
+        return this.startDate.get(Calendar.HOUR_OF_DAY);
     }
 
-    public int getMinute(){
-        return this.date.get(Calendar.MINUTE);
+    public int getStartMinute(){
+        return this.startDate.get(Calendar.MINUTE);
     }
 
-    public String getString(int num){
+    // End Date Setters
+    public void setEndYear(int year){
+        this.endDate.set(Calendar.YEAR, year);
+    }
+
+    public void setEndMonth(int month){
+        this.endDate.set(Calendar.MONTH, month-1);
+    }
+
+    public void setEndDay(int day){
+        this.endDate.set(Calendar.DAY_OF_MONTH, day);
+    }
+
+    public void setEndHour(int hour){
+        this.endDate.set(Calendar.HOUR_OF_DAY, hour);
+    }
+
+    public void setEndMinute(int minute){
+        this.endDate.set(Calendar.MINUTE, minute);
+    }
+
+    // End Date Getters
+    public int getEndYear(){
+        return this.endDate.get(Calendar.YEAR);
+    }
+
+    public int getEndMonth(){
+        return this.endDate.get(Calendar.MONTH);
+    }
+
+    public int getEndDay(){
+        return this.endDate.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public int getEndHour(){
+        return this.endDate.get(Calendar.HOUR_OF_DAY);
+    }
+
+    public int getEndMinute(){
+        return this.endDate.get(Calendar.MINUTE);
+    }
+
+    public String getString(int num) {
         return Integer.toString(num);
     }
-
-
 
 }
 
