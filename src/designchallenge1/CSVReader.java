@@ -1,10 +1,10 @@
 package designchallenge1;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList; 
+import java.sql.*;
+import java.util.ArrayList;
 import java.io.*;
 import java.awt.Color;
 import java.io.PrintWriter;
@@ -18,13 +18,37 @@ public class CSVReader {
     private static final String PSV_FILE = "DLSU Unicalendar.psv";
     private static final String EVENTS_STORAGE = "My Events.csv";
 
-    public static void main (String args[])  throws FileNotFoundException  {
+    private static Statement stmt;
+
+    private static String driver = "com.mysql.jdbc.Driver";
+    private static String db = "calendardb";
+    private static String url = "jdbc:mysql://localhost/" + db + "?useSSL=false";
+    private static String user = "root";
+    private static String pass = "password";
+    private static Connection conn = null;
+
+    public static void main (String args[])  {
+
+        //Connection attempt
+        try {
+            Class.forName(driver);
+            conn = DriverManager.getConnection(url, user, pass);
+            System.out.println("Connected to database : " + db);
+            stmt = conn.createStatement();
+
+        } catch (Exception e) {
+            System.err.println("Got an exception! ");
+            System.err.println(e.getMessage());
+        }
+
+
 
         ArrayList<Event> temp = readPSVFile(PSV_FILE);
-
         temp.addAll(readCSVFile(CSV_FILE));
 
         saveToCSVFile(temp);
+
+        saveToDatabase(temp);
 
     }
 
@@ -44,7 +68,7 @@ public class CSVReader {
                 int[] date = getMonthDayYear(eventDetails[0]);
 
                 
-                e.setMonth(date[0]-1);
+                e.setMonth(date[0]);
                 e.setDay(date[1]);
                 e.setYear(date[2]);
                 e.setName(eventDetails[1]);
@@ -80,7 +104,7 @@ public class CSVReader {
 
                 int[] date = getMonthDayYear(eventDetails[1]);
                 
-                e.setMonth(date[0]-1);
+                e.setMonth(date[0]);
                 e.setDay(date[1]);
                 e.setYear(date[2]);
             
@@ -106,11 +130,10 @@ public class CSVReader {
 
             for (int i = 0; i < events.size(); i++) {
 
-                int addOne = events.get(i).getMonth() + 1;
 
                 sb.append(events.get(i).getName());
                 sb.append(",");
-                sb.append(events.get(i).getString(addOne));
+                sb.append(events.get(i).getString(events.get(i).getMonth()));
                 sb.append(",");
                 sb.append(events.get(i).getString(events.get(i).getDay()));
                 sb.append(",");
@@ -126,7 +149,7 @@ public class CSVReader {
 
             pw.write(sb.toString());
             pw.close();
-            System.out.println("File saved");
+            System.out.println("File saved to file: " + EVENTS_STORAGE);
 
         } catch (IOException | IllegalArgumentException | SecurityException e) {
             e.printStackTrace();
@@ -136,15 +159,66 @@ public class CSVReader {
         return true;
     }
 
+    static boolean saveToDatabase (ArrayList<Event> events)  {
+
+        for (int i=0; i<events.size(); i++) {
+
+            PreparedStatement addEvent = null;
+
+            String insertEvent = "INSERT INTO myevents (event_id, name, month, day, year, hour, minutes, rgbid) VALUES ("+ getNewEventID() +", ?, '"+ events.get(i).getMonth() +"', '"+ events.get(i).getDay() +"', '"+ events.get(i).getYear() +"', '"+ events.get(i).getHour() +"', '"+ events.get(i).getMinute()  +"', '"+ events.get(i).getColorRGB() +"')";
+
+            try {
+                addEvent = conn.prepareStatement(insertEvent);
+                addEvent.setString(1, events.get(i).getName());
+                addEvent.executeUpdate();
+            } catch (SQLException e) {
+                System.out.println("SQLException: " + e.getMessage());
+                System.out.println("SQLState: " + e.getSQLState());
+                System.out.println("VendorError: " + e.getErrorCode());
+                return false;
+            } finally {
+                if (addEvent != null) {
+                    try {
+                        addEvent.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        System.out.println("File saved to database: " + db);
+        return true;
+    }
+
     static int[] getMonthDayYear (String date) {
 
         String[] dateString = date.split(SLASH_DELIMITER, 3);
         int[] dateInt = new int[dateString.length];
 
         for (int i = 0; i < dateInt.length; i++){
-            
             dateInt[i] = Integer.parseInt(dateString[i]); 
         }
         return dateInt;
-    } 
+    }
+
+    static int getNewEventID() {
+        String returnMaxEventID = "SELECT COUNT(event_id) as 'max' FROM myevents";
+
+        int newID = 0;
+
+        try {
+            ResultSet rs = stmt.executeQuery(returnMaxEventID);
+            while (rs.next()) {
+                newID = rs.getInt("max");
+                newID++;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
+
+        return newID;
+    }
 }
