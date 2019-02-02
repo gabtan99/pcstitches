@@ -10,6 +10,7 @@ package designchallenge1;
  */
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
@@ -33,6 +34,9 @@ public class CalendarProgram{
         /**** Calendar Table Components ***/
 	public JTable calendarTable;
         public DefaultTableModel modelCalendarTable;
+
+        /**** Events stored in Calendar *****/
+        public ArrayList<EventsInterface> eventList;
         
         public void refreshCalendar(int month, int year)
         {
@@ -75,7 +79,8 @@ public class CalendarProgram{
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 }
 		catch (Exception e) {}
-                
+
+		eventList = new ArrayList<>();
 		frmMain = new JFrame ("Calendar Application");
                 frmMain.setSize(660, 750);
 		pane = frmMain.getContentPane();
@@ -102,7 +107,9 @@ public class CalendarProgram{
                     {  
                         int col = calendarTable.getSelectedColumn();  
                         int row = calendarTable.getSelectedRow();
-                        // Get the day
+
+                        // NEW CODE--------------------------------------------------------------------
+                        //Get the day
 						GregorianCalendar cal = new GregorianCalendar(yearToday, monthToday, 1);
 						int nod = cal.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 						int som = cal.get(GregorianCalendar.DAY_OF_WEEK);
@@ -116,6 +123,9 @@ public class CalendarProgram{
 							if (calcRow == row && calcColumn == col)
 								found = true;
 						}
+                        day--;
+						ViewEvents popup = new ViewEvents(day);
+						// NEW CODE--------------------------------------------------------------------
 
 
                     }
@@ -182,7 +192,6 @@ public class CalendarProgram{
 		refreshCalendar (monthBound, yearBound); //Refresh calendar
 	}
 
-
 	class btnPrev_Action implements ActionListener
         {
 		public void actionPerformed (ActionEvent e)
@@ -227,4 +236,71 @@ public class CalendarProgram{
 			}
 		}
 	}
+
+    class ViewEvents{
+            public JFrame mainFrame;
+            public JPanel mainPanel;
+            public Container pane;
+            public JButton addButton, deleteButton;
+            public JScrollPane scrollList;
+
+            public DefaultTableModel modelEventsListTable;
+            public JTable eventsListTable;
+
+            public ViewEvents(int day){
+                frmMain.setEnabled(false);
+                String dateHeader = "";
+                dateHeader = dateHeader.concat(monthLabel.getText()+ " " + day + ", " + yearToday);
+
+                mainFrame = new JFrame();
+                mainFrame.setSize(500, 550);
+                mainFrame.setTitle(dateHeader);
+                pane = mainFrame.getContentPane();
+                pane.setLayout(null);
+                mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                mainFrame.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent event) {
+                        frmMain.setEnabled(true);
+                        mainFrame.dispose();
+                    }
+                });
+
+				addButton = new JButton("Add");
+				deleteButton = new JButton("Delete");
+
+                modelEventsListTable = new DefaultTableModel();
+                eventsListTable = new JTable (modelEventsListTable);
+                scrollList = new JScrollPane(eventsListTable);
+
+                mainPanel = new JPanel(null);
+                TitledBorder title = BorderFactory.createTitledBorder("Events on This Day");
+                title.setTitleJustification(TitledBorder.CENTER);
+                mainPanel.setBorder(title);
+
+                pane.add(mainPanel);
+                mainPanel.add(addButton);
+                mainPanel.add(scrollList);
+
+
+                mainPanel.setBounds(10, 10, 465, 495);
+                addButton.setBounds(203, 430, 55,25);
+				scrollList.setBounds(132, 60, 200,340);
+
+
+                mainFrame.setLocationRelativeTo(frmMain);
+                mainFrame.setVisible(true);
+                mainFrame.setResizable(false);
+
+				eventsListTable.setColumnSelectionAllowed(true);
+				eventsListTable.setRowSelectionAllowed(true);
+				eventsListTable.setTableHeader(null);
+				eventsListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+				eventsListTable.setRowHeight(20);
+				modelEventsListTable.setColumnCount(1);
+				modelEventsListTable.setRowCount(10);
+				eventsListTable.setDefaultRenderer(eventsListTable.getColumnClass(0), new ListRenderer());
+            }
+    }
 }
