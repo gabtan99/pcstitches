@@ -12,6 +12,9 @@ public class Event implements EventsInterface {
     public Event(){
         startDate = Calendar.getInstance();
         endDate = Calendar.getInstance();
+        setStartHour(0);
+        setStartMinute(0);
+
     }
 
     // Getters
@@ -42,7 +45,7 @@ public class Event implements EventsInterface {
     }
 
     public void setStartMonth(int month){
-        this.startDate.set(Calendar.MONTH, month);
+        this.startDate.set(Calendar.MONTH, month-1);
     }
 
     public void setStartDay(int day){
@@ -84,7 +87,7 @@ public class Event implements EventsInterface {
     }
 
     public void setEndMonth(int month){
-        this.endDate.set(Calendar.MONTH, month);
+        this.endDate.set(Calendar.MONTH, month-1);
     }
 
     public void setEndDay(int day){
