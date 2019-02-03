@@ -249,6 +249,7 @@ public class CalendarProgram{
             public JList eventsListTable;
 
             public ViewEvents(int day){
+            	// Initialize the Frames
                 frmMain.setEnabled(false);
                 String dateHeader = "";
                 dateHeader = dateHeader.concat(monthLabel.getText()+ " " + day + ", " + yearToday);
@@ -258,6 +259,7 @@ public class CalendarProgram{
                 mainFrame.setTitle(dateHeader);
                 pane = mainFrame.getContentPane();
                 pane.setLayout(null);
+                // Custom Exit on Close
                 mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
                 mainFrame.addWindowListener(new WindowAdapter() {
                     @Override
@@ -267,22 +269,31 @@ public class CalendarProgram{
                     }
                 });
 
+                // Add Button Initialize, Trigger pop up on click
 				addButton = new JButton("Add");
 				addButton.addActionListener(new ActionListener() {
+					// Add Event Popup Initialize window
 					JFrame frmAdd;
 					JPanel panelAdd;
 					Container paneAdd;
 					JButton continueAddButton, cancelAddButton, selectColorButton;
-					JLabel lblEventName, lblSelectColor, lblColor;
+					JLabel lblEventName, lblSelectColor, lblColor, lblSelectStart, lblSelectEnd;
 					JTextField tfEventName;
+					JCheckBox chkWholeDay;
+					JComboBox cmbSYear, cmbSMon, cmbSDay, cmbSHour, cmbSMin;
+					JComboBox cmbEYear, cmbEMon, cmbEDay, cmbEHour, cmbEMin;
+
 					@Override
 					public void actionPerformed(ActionEvent e) {
+						//Add Event Popup
 						mainFrame.setEnabled(false);
 
 						frmAdd = new JFrame("Add Event Details");
 						frmAdd.setSize(300, 340);
 						paneAdd = frmAdd.getContentPane();
 						paneAdd.setLayout(null);
+
+						// Custom Exit on CLose
 						frmAdd.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 						frmAdd.addWindowListener(new WindowAdapter() {
 							@Override
@@ -292,14 +303,17 @@ public class CalendarProgram{
 							}
 						});
 
+						// Event Name Field
 						lblEventName = new JLabel ("Event Title:");
 						tfEventName = new JTextField();
 
+						// Event Color Chooser
 						lblSelectColor = new JLabel ("Event Color:");
 						lblColor = new JLabel();
 						lblColor.setOpaque(true);
 						lblColor.setBackground(Color.black);
 						selectColorButton = new JButton ("Choose");
+						// JColorChooser UI to choose
 						selectColorButton.addActionListener(new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent e) {
@@ -309,6 +323,7 @@ public class CalendarProgram{
 							}
 						});
 
+						// COntinue pushing through with adding
 						continueAddButton = new JButton("Continue");
 						continueAddButton.addActionListener(new ActionListener() {
 							@Override
@@ -317,12 +332,17 @@ public class CalendarProgram{
 								if (status != null && status != "") {
 									Event newEvent = new Event();
 									newEvent.setName(tfEventName.getText());
-									newEvent.setStartDay(day);
-									newEvent.setStartMonth(monthToday + 1);
-									newEvent.setStartYear(yearToday);
-									newEvent.setEndDay(day);
-									newEvent.setEndMonth(monthToday + 1);
-									newEvent.setEndYear(yearToday);
+									newEvent.setStartDay((int)cmbSDay.getSelectedItem());
+									newEvent.setStartMonth((int)cmbSMon.getSelectedItem());
+									newEvent.setStartYear((int)cmbSYear.getSelectedItem());
+									newEvent.setStartHour((int)cmbSHour.getSelectedItem());
+									newEvent.setStartMinute((int)cmbSMin.getSelectedItem());
+
+									newEvent.setEndDay((int)cmbEDay.getSelectedItem());
+									newEvent.setEndMonth((int)cmbEMon.getSelectedItem());
+									newEvent.setEndYear((int)cmbEYear.getSelectedItem());
+									newEvent.setEndHour((int)cmbEHour.getSelectedItem());
+									newEvent.setEndMinute((int)cmbEMin.getSelectedItem());
 									newEvent.setColor(lblColor.getBackground());
 									eventList.add(newEvent);
 								}
@@ -332,6 +352,8 @@ public class CalendarProgram{
 								frmAdd.dispose();
 							}
 						});
+
+						//Cancel Pushing through with adding
 						cancelAddButton = new JButton("Cancel");
 						cancelAddButton.addActionListener(new ActionListener() {
 							@Override
@@ -342,7 +364,160 @@ public class CalendarProgram{
 							}
 						});
 
+						// Event Time Choosing
+						chkWholeDay = new JCheckBox("Whole Day", false);
+						lblSelectStart = new JLabel("Choose Start Date and Time:");
+						lblSelectEnd = new JLabel("Choose End Date and Time:");
+						cmbSYear = new JComboBox();
+						cmbSMon = new JComboBox();
+						cmbSDay = new JComboBox();
+						cmbSHour = new JComboBox();
+						cmbSMin = new JComboBox();
+						cmbEYear = new JComboBox();
+						cmbEMon = new JComboBox();
+						cmbEDay = new JComboBox();
+						cmbEHour = new JComboBox();
+						cmbEMin = new JComboBox();
 
+						// Setting Contents of the Combo Boxes
+						for (int i = yearBound-100; i <= yearBound+100; i++)
+						{
+							cmbSYear.addItem(i);
+							cmbEYear.addItem(i);
+						}
+
+						for (int i = 0; i < 12; i++){
+							cmbSMon.addItem(i+1);
+							cmbEMon.addItem(i+1);
+						}
+
+						for (int i = 0;i < 24; i++){
+							cmbSHour.addItem(i);
+							cmbEHour.addItem(i);
+						}
+
+						for (int i = 0; i < 60; i++){
+							cmbSMin.addItem(i);
+							cmbEMin.addItem(i);
+						}
+
+						// Set Initially Selected Start Dates
+						cmbSYear.setSelectedItem(yearToday);
+						cmbSMon.setSelectedItem(monthToday + 1);
+
+						// Initilize COntents of Start Day Combo Box
+						int initSYear, initSMon;
+						initSYear = (int)cmbSYear.getSelectedItem();
+						initSMon = (int)cmbSMon.getSelectedItem() - 1;
+						GregorianCalendar startDays = new GregorianCalendar(initSYear, initSMon, 1);
+						int SMaxDays = startDays.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+						for (int i = 1; i <= SMaxDays; i++)
+							cmbSDay.addItem(i);
+
+						cmbSDay.setSelectedItem(day);
+						cmbSHour.setSelectedItem(0);
+						cmbSMin.setSelectedItem(0);
+
+						//Item Listener to Change cmbEDays if year or month changes, for better UX
+						cmbSYear.addItemListener(new ItemListener() {
+							@Override
+							public void itemStateChanged(ItemEvent e) {
+								cmbSDay.removeAllItems();
+								int initSYear, initSMon;
+								initSYear = (int)cmbSYear.getSelectedItem();
+								initSMon = (int)cmbSMon.getSelectedItem() - 1;
+								GregorianCalendar startDays = new GregorianCalendar(initSYear, initSMon, 1);
+								int SMaxDays = startDays.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+								for (int i = 1; i <= SMaxDays; i++)
+									cmbSDay.addItem(i);
+							}
+						});
+
+						cmbSMon.addItemListener(new ItemListener() {
+							@Override
+							public void itemStateChanged(ItemEvent e) {
+								cmbSDay.removeAllItems();
+								int initSYear, initSMon;
+								initSYear = (int)cmbSYear.getSelectedItem();
+								initSMon = (int)cmbSMon.getSelectedItem() - 1;
+								GregorianCalendar startDays = new GregorianCalendar(initSYear, initSMon, 1);
+								int SMaxDays = startDays.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+								for (int i = 1; i <= SMaxDays; i++)
+									cmbSDay.addItem(i);
+							}
+						});
+
+						// Set Initially End Dates
+						cmbEYear.setSelectedItem(yearToday);
+						cmbEMon.setSelectedItem(monthToday + 1);
+
+						// Initilize COntents of End Day Combo Box
+						int initEYear, initEMon;
+						initEYear = (int)cmbEYear.getSelectedItem();
+						initEMon = (int)cmbEMon.getSelectedItem() - 1;
+						GregorianCalendar endDays = new GregorianCalendar(initEYear, initEMon, 1);
+						int EMaxDays = endDays.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+						for (int i = 1; i <= EMaxDays; i++)
+							cmbEDay.addItem(i);
+
+						cmbEDay.setSelectedItem(day);
+						cmbEHour.setSelectedItem(23);
+						cmbEMin.setSelectedItem(59);
+
+						//Item Listener to Change cmbEDays if year or month changes, for better UX
+						cmbEYear.addItemListener(new ItemListener() {
+							@Override
+							public void itemStateChanged(ItemEvent e) {
+								cmbEDay.removeAllItems();
+								int initEYear, initEMon;
+								initEYear = (int)cmbEYear.getSelectedItem();
+								initEMon = (int)cmbEMon.getSelectedItem() - 1;
+								GregorianCalendar endDays = new GregorianCalendar(initEYear, initEMon, 1);
+								int EMaxDays = endDays.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+								for (int i = 1; i <= EMaxDays; i++)
+									cmbEDay.addItem(i);
+							}
+						});
+
+						cmbEMon.addItemListener(new ItemListener() {
+							@Override
+							public void itemStateChanged(ItemEvent e) {
+								cmbEDay.removeAllItems();
+								int initEYear, initEMon;
+								initEYear = (int)cmbEYear.getSelectedItem();
+								initEMon = (int)cmbEMon.getSelectedItem() - 1;
+								GregorianCalendar endDays = new GregorianCalendar(initEYear, initEMon, 1);
+								int EMaxDays = endDays.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+								for (int i = 1; i <= EMaxDays; i++)
+									cmbEDay.addItem(i);
+							}
+						});
+
+						// Checkbox ActionListener
+						chkWholeDay.addChangeListener(new ChangeListener() {
+							@Override
+							public void stateChanged(ChangeEvent e) {
+								if (chkWholeDay.isSelected()){
+									cmbSHour.setSelectedItem(0);
+									cmbSMin.setSelectedItem(0);
+									cmbEHour.setSelectedItem(23);
+									cmbEMin.setSelectedItem(59);
+
+									cmbSHour.setEnabled(false);
+									cmbSMin.setEnabled(false);
+									cmbEHour.setEnabled(false);
+									cmbEMin.setEnabled(false);
+								} else {
+
+									cmbSHour.setEnabled(true);
+									cmbSMin.setEnabled(true);
+									cmbEHour.setEnabled(true);
+									cmbEMin.setEnabled(true);
+								}
+							}
+						});
+
+						// Main Panel
 						panelAdd = new JPanel(null);
 						TitledBorder addTitle = BorderFactory.createTitledBorder("Fill in Event Details in the Fields");
 						addTitle.setTitleJustification(TitledBorder.CENTER);
@@ -356,15 +531,43 @@ public class CalendarProgram{
 						panelAdd.add(lblSelectColor);
 						panelAdd.add(lblColor);
 						panelAdd.add(selectColorButton);
+						panelAdd.add(chkWholeDay);
+						panelAdd.add(lblSelectStart);
+						panelAdd.add(lblSelectEnd);
+						panelAdd.add(cmbSYear);
+						panelAdd.add(cmbSMon);
+						panelAdd.add(cmbSDay);
+						panelAdd.add(cmbSHour);
+						panelAdd.add(cmbSMin);
+						panelAdd.add(cmbEYear);
+						panelAdd.add(cmbEMon);
+						panelAdd.add(cmbEDay);
+						panelAdd.add(cmbEHour);
+						panelAdd.add(cmbEMin);
 
 						panelAdd.setBounds(5, 5, 275, 290);
 						continueAddButton.setBounds(58, 250, 75, 25);
 						cancelAddButton.setBounds(140, 250, 75, 25);
-						lblEventName.setBounds(12, 30, 75, 25);
-						tfEventName.setBounds(12, 55, 250, 25);
-						lblSelectColor.setBounds(12, 100, 75, 25);
-						lblColor.setBounds(80, 100, 25, 25);
-						selectColorButton.setBounds(120, 100, 75, 25);
+						lblEventName.setBounds(12, 25, 75, 25);
+						tfEventName.setBounds(12, 50, 250, 25);
+						lblSelectColor.setBounds(12, 80, 75, 25);
+						lblColor.setBounds(80, 80, 25, 25);
+						selectColorButton.setBounds(120, 80, 75, 25);
+						chkWholeDay.setBounds(12, 115, 85, 25);
+						lblSelectStart.setBounds(12, 140, 140, 25);
+						cmbSYear.setBounds(13, 165, 50, 25);
+						cmbSMon.setBounds(67, 165, 45, 25);
+						cmbSDay.setBounds(116, 165, 45, 25);
+						cmbSHour.setBounds(165, 165, 45, 25);
+						cmbSMin.setBounds(214, 165, 45, 25);
+						lblSelectEnd.setBounds(12, 190, 140, 25);
+						cmbEYear.setBounds(13, 215, 50, 25);
+						cmbEMon.setBounds(67, 215, 45, 25);
+						cmbEDay.setBounds(116, 215, 45, 25);
+						cmbEHour.setBounds(165, 215, 45, 25);
+						cmbEMin.setBounds(214, 215, 45, 25);
+
+
 
 						frmAdd.setLocationRelativeTo(mainFrame);
 						frmAdd.setVisible(true);
@@ -375,11 +578,10 @@ public class CalendarProgram{
 				deleteButton = new JButton("Delete");
 
 
-
+				// Main Showing of all Events
                 modelEventsListTable = new DefaultListModel();
                 eventsListTable = new JList (modelEventsListTable);
                 scrollList = new JScrollPane(eventsListTable);
-
 
                 mainPanel = new JPanel(null);
                 TitledBorder title = BorderFactory.createTitledBorder("Events on This Day");
@@ -405,6 +607,7 @@ public class CalendarProgram{
 				refreshViewEvents(day);
             }
 
+            // Refreshing the list of events upon adding or not
             public void refreshViewEvents(int day){
 				ArrayList<Event> eventsToday = new ArrayList<>();
 
