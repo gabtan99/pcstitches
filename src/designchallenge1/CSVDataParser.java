@@ -8,23 +8,20 @@ public class CSVDataParser extends DataParser {
 
 	private static final String COMMA_DELIMITER = "\\, ";
 	private static final String SLASH_DELIMITER = "\\/";
-	private static final String CSV_FILE = "Philippine Holidays.csv";
-	private static final String EVENTS_STORAGE = "My Events.csv";
+	private static final String CSV_FILE = "IOFiles/Philippine Holidays.csv";
+	private static final String EVENTS_STORAGE = "IOFiles/My Events.csv";
 
 	ArrayList<Event> readData() {
 
 		ArrayList<Event> temp = new ArrayList<Event>();
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(new File(CSV_FILE)))) {
-
 			String line;
-
 			while ((line = reader.readLine()) != null) {
 
 				String[] eventDetails = line.split(COMMA_DELIMITER, 3);
 
 				Event e = new Event();
-
 				int[] date = getMonthDayYear(eventDetails[0]);
 
 				e.setStartMonth(date[0]);
@@ -56,7 +53,6 @@ public class CSVDataParser extends DataParser {
 			StringBuilder sb = new StringBuilder();
 
 			for (int i = 0; i < events.size(); i++) {
-
 
 				sb.append(events.get(i).getName());
 				sb.append(",");

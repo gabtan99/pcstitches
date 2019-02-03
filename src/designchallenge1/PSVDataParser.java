@@ -8,8 +8,8 @@ public class PSVDataParser extends DataParser{
 
 	private static final String PIPE_DELIMITER = "\\|";
 	private static final String SLASH_DELIMITER = "\\/";
-	private static final String PSV_FILE = "DLSU Unicalendar.psv";
-	private static final String EVENTS_STORAGE = "My Events.psv";
+	private static final String PSV_FILE = "IOFiles/DLSU Unicalendar.psv";
+	private static final String EVENTS_STORAGE = "IOFiles/My Events.psv";
 
 
 	ArrayList<Event> readData() {

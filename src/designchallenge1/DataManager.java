@@ -10,7 +10,7 @@ public class DataManager {
         PSVDataParser psvread = new PSVDataParser();
         DBDataParser dbsave = new DBDataParser();
 
-        ArrayList<Event> temp = csvread.readData();
+        ArrayList<Event> temp = dbsave.readData();
 
         csvread.writeData(temp);
         psvread.writeData(temp);

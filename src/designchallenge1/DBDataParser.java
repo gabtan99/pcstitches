@@ -36,10 +36,7 @@ public class DBDataParser extends DataParser {
 				e.setEndMonth(rs.getInt("end_month"));
 				e.setEndDay(rs.getInt("end_day"));
 				e.setEndYear(rs.getInt("end_year"));
-
-
-				//Color c = (Color) Color.class.getField(eventDetails[2].toUpperCase()).get(null);
-				//e.setColor(c);
+				e.setColor(new Color (rs.getInt("rgbid")));
 
 				temp.add(e);
 			}
