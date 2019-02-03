@@ -9,7 +9,7 @@ import java.io.*;
 import java.awt.Color;
 import java.io.PrintWriter;
 
-public class CSVReader {
+public class DataParser {
 
     private static final String PIPE_DELIMITER = "\\|";
     private static final String COMMA_DELIMITER = "\\, ";
@@ -180,6 +180,16 @@ public class CSVReader {
     }
 
     static boolean saveToDatabase (ArrayList<Event> events)  {
+
+        String clearData = "DELETE FROM myevents WHERE event_id > 0";
+
+        try {
+            stmt.executeUpdate(clearData);
+        } catch (SQLException e) {
+            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("SQLState: " + e.getSQLState());
+            System.out.println("VendorError: " + e.getErrorCode());
+        }
 
         for (int i=0; i<events.size(); i++) {
 
