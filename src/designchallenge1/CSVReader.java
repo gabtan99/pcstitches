@@ -68,11 +68,11 @@ public class CSVReader {
                 int[] date = getMonthDayYear(eventDetails[0]);
 
                 
-                e.setStartMonth(date[0]+1);
+                e.setStartMonth(date[0]);
                 e.setStartDay(date[1]);
                 e.setStartYear(date[2]);
 
-	            e.setEndDay(date[0]+1);
+	            e.setEndMonth(date[0]);
 	            e.setEndDay(date[1]);
 	            e.setEndYear(date[2]);
 
@@ -110,11 +110,11 @@ public class CSVReader {
 
                 int[] date = getMonthDayYear(eventDetails[1]);
                 
-                e.setStartMonth(date[0]+1);
+                e.setStartMonth(date[0]);
                 e.setStartDay(date[1]);
                 e.setStartYear(date[2]);
 
-                e.setEndDay(date[0]+1);
+                e.setEndMonth(date[0]);
 	            e.setEndDay(date[1]);
 	            e.setEndYear(date[2]);
             
@@ -143,15 +143,25 @@ public class CSVReader {
 
                 sb.append(events.get(i).getName());
                 sb.append(",");
-                sb.append(events.get(i).getString(events.get(i).getStartMonth()));
+                sb.append(events.get(i).getString(events.get(i).getStartMonth()+1));
                 sb.append(",");
                 sb.append(events.get(i).getString(events.get(i).getStartDay()));
                 sb.append(",");
                 sb.append(events.get(i).getString(events.get(i).getStartYear()));
                 sb.append(",");
                 sb.append(events.get(i).getString(events.get(i).getStartHour()));
-                sb.append(","); 
+                sb.append(",");
                 sb.append(events.get(i).getString(events.get(i).getStartMinute()));
+                sb.append(",");
+                sb.append(events.get(i).getString(events.get(i).getEndMonth()+1));
+                sb.append(",");
+                sb.append(events.get(i).getString(events.get(i).getEndDay()));
+                sb.append(",");
+                sb.append(events.get(i).getString(events.get(i).getEndYear()));
+                sb.append(",");
+                sb.append(events.get(i).getString(events.get(i).getEndHour()));
+                sb.append(",");
+                sb.append(events.get(i).getString(events.get(i).getEndMinute()));
                 sb.append(",");
                 sb.append(events.get(i).getColorRGB());
                 sb.append("\n");
@@ -175,9 +185,10 @@ public class CSVReader {
 
             PreparedStatement addEvent = null;
 
-            String insertEvent = "INSERT INTO myevents (event_id, name, start_month, start_day, start_year, start_hour, start_minutes, rgbid) VALUES ("+ getNewEventID() +", ?, '"
-		            + events.get(i).getStartMonth() +"', '"+ events.get(i).getStartDay() +"', '"+ events.get(i).getStartYear() +"', '"+ events.get(i).getStartHour() +"', '"
-		            + events.get(i).getStartMinute()  +"', '"+ events.get(i).getColorRGB() +"')";
+            String insertEvent = "INSERT INTO myevents (event_id, name, start_month, start_day, start_year, start_hour, start_minutes, end_month, end_day, end_year, end_hour, end_minutes, rgbid) VALUES ("+ getNewEventID() +", ?, '"
+		            + (events.get(i).getStartMonth()+1) +"', '"+ events.get(i).getStartDay() +"', '"+ events.get(i).getStartYear() +"', '"+ events.get(i).getStartHour() +"', '"
+		            + events.get(i).getStartMinute()  +"', '"+ (events.get(i).getEndMonth()+1) +"', '"+ events.get(i).getEndDay()+"', '"+ events.get(i).getEndYear() +"', '"+ events.get(i).getEndHour()
+                    +"', '"+ events.get(i).getEndMinute() +"', '"+ events.get(i).getColorRGB() +"')";
 
             try {
                 addEvent = conn.prepareStatement(insertEvent);

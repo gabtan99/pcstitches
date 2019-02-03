@@ -23,12 +23,17 @@ USE `calendardb` ;
 CREATE TABLE IF NOT EXISTS `calendardb`.`myevents` (
   `event_id` INT(11) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
-  `month` INT(11) NOT NULL,
-  `day` INT(11) NOT NULL,
-  `year` INT(11) NOT NULL,
-  `hour` INT(11) NOT NULL,
-  `minutes` INT(11) NOT NULL,
-  `rgbid` DOUBLE NOT NULL,
+  `start_month` INT(11) NOT NULL,
+  `start_day` INT(11) NOT NULL,
+  `start_year` INT(11) NOT NULL,
+  `start_hour` INT(11) NOT NULL,
+  `start_minutes` INT(11) NOT NULL,
+  `end_month` INT(11) NOT NULL,
+  `end_day` INT(11) NOT NULL,
+  `end_year` INT(11) NOT NULL,
+  `end_hour` INT(11) NOT NULL,
+  `end_minutes` INT(11) NOT NULL,
+  `rgbid` INT(20) NOT NULL,
   PRIMARY KEY (`event_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
