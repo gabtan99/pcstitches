@@ -18,7 +18,6 @@ public class DBDataParser extends DataParser {
 	ArrayList<Event> readData() {
 
 		String returnAllEvents = "SELECT * FROM myevents";
-
 		ArrayList<Event> temp = new ArrayList<Event>();
 
 		connectDB();
@@ -45,6 +44,8 @@ public class DBDataParser extends DataParser {
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
+
+		System.out.println("Data imported from: " + db);
 		conn = null;
 		return temp;
 	}
@@ -54,6 +55,7 @@ public class DBDataParser extends DataParser {
 		connectDB();
 
 		String clearData = "DELETE FROM myevents WHERE event_id > 0";
+
 		try {
 			stmt.executeUpdate(clearData);
 		} catch (SQLException e) {
@@ -70,20 +72,21 @@ public class DBDataParser extends DataParser {
 					+"', '"+ events.get(i).getEndMinute() +"', '"+ events.get(i).getColorRGB() +"')";
 
 			try {
-
 				addEvent = conn.prepareStatement(insertEvent);
 				addEvent.setString(1, events.get(i).getName());
 				addEvent.executeUpdate();
+
 			} catch (SQLException e) {
 				System.out.println("SQLException: " + e.getMessage());
 				System.out.println("SQLState: " + e.getSQLState());
 				System.out.println("VendorError: " + e.getErrorCode());
 				return false;
 			} finally {
-				try { addEvent.close(); } catch (Exception e) { /* ignored */ }
+				try { addEvent.close(); } catch (Exception e){ /* ignored */ }
 			}
 		}
-		System.out.println("File saved to database: " + db);
+
+		System.out.println("Data saved to database: " + db);
 		conn = null;
 		return true;
 	}

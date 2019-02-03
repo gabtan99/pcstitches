@@ -37,13 +37,15 @@ public class CSVDataParser extends DataParser {
 				e.setColor(c);
 
 				temp.add(e);
+
+
 			}
+			System.out.println("Data imported from: " + CSV_FILE);
 
 		} catch (IOException | IllegalArgumentException | IllegalAccessException | NoSuchFieldException
 				| SecurityException e) {
 			e.printStackTrace();
 		}
-
 		return temp;
 	}
 
@@ -82,7 +84,7 @@ public class CSVDataParser extends DataParser {
 
 			pw.write(sb.toString());
 			pw.close();
-			System.out.println("File saved to file: " + EVENTS_STORAGE);
+			System.out.println("Data saved to file: " + EVENTS_STORAGE);
 
 		} catch (IOException | IllegalArgumentException | SecurityException e) {
 			e.printStackTrace();

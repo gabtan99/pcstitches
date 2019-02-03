@@ -11,7 +11,6 @@ public class PSVDataParser extends DataParser{
 	private static final String PSV_FILE = "IOFiles/DLSU Unicalendar.psv";
 	private static final String EVENTS_STORAGE = "IOFiles/My Events.psv";
 
-
 	ArrayList<Event> readData() {
 		ArrayList<Event> temp = new ArrayList<Event>();
 
@@ -40,6 +39,8 @@ public class PSVDataParser extends DataParser{
 				e.setColor(c);
 
 				temp.add(e);
+				reader.close();
+				System.out.println("Data imported from: " + PSV_FILE);
 			}
 
 		} catch (IOException | IllegalArgumentException | IllegalAccessException | NoSuchFieldException
@@ -57,7 +58,6 @@ public class PSVDataParser extends DataParser{
 			StringBuilder sb = new StringBuilder();
 
 			for (int i = 0; i < events.size(); i++) {
-
 
 				sb.append(events.get(i).getName());
 				sb.append("|");
@@ -87,7 +87,7 @@ public class PSVDataParser extends DataParser{
 
 			pw.write(sb.toString());
 			pw.close();
-			System.out.println("File saved to file: " + EVENTS_STORAGE);
+			System.out.println("Data saved to file: " + EVENTS_STORAGE);
 
 		} catch (IOException | IllegalArgumentException | SecurityException e) {
 			e.printStackTrace();
