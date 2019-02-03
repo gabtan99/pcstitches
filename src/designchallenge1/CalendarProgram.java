@@ -37,7 +37,7 @@ public class CalendarProgram{
         public DefaultTableModel modelCalendarTable;
 
         /**** Events stored in Calendar *****/
-        public ArrayList<EventsInterface> eventList;
+        public ArrayList<Event> eventList;
         
         public void refreshCalendar(int month, int year)
         {
@@ -245,8 +245,8 @@ public class CalendarProgram{
             public JButton addButton, deleteButton;
             public JScrollPane scrollList;
 
-            public DefaultTableModel modelEventsListTable;
-            public JTable eventsListTable;
+            public DefaultListModel modelEventsListTable;
+            public JList eventsListTable;
 
             public ViewEvents(int day){
                 frmMain.setEnabled(false);
@@ -268,11 +268,118 @@ public class CalendarProgram{
                 });
 
 				addButton = new JButton("Add");
+				addButton.addActionListener(new ActionListener() {
+					JFrame frmAdd;
+					JPanel panelAdd;
+					Container paneAdd;
+					JButton continueAddButton, cancelAddButton, selectColorButton;
+					JLabel lblEventName, lblSelectColor, lblColor;
+					JTextField tfEventName;
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						mainFrame.setEnabled(false);
+
+						frmAdd = new JFrame("Add Event Details");
+						frmAdd.setSize(300, 340);
+						paneAdd = frmAdd.getContentPane();
+						paneAdd.setLayout(null);
+						frmAdd.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+						frmAdd.addWindowListener(new WindowAdapter() {
+							@Override
+							public void windowClosing(WindowEvent event) {
+								mainFrame.setEnabled(true);
+								frmAdd.dispose();
+							}
+						});
+
+						lblEventName = new JLabel ("Event Title:");
+						tfEventName = new JTextField();
+
+						lblSelectColor = new JLabel ("Event Color:");
+						lblColor = new JLabel();
+						lblColor.setOpaque(true);
+						lblColor.setBackground(Color.black);
+						selectColorButton = new JButton ("Choose");
+						selectColorButton.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								Color c =JColorChooser.showDialog(null, "Choose a Color", lblColor.getBackground());
+								if (c != null)
+									lblColor.setBackground(c);
+							}
+						});
+
+						continueAddButton = new JButton("Continue");
+						continueAddButton.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								String status = tfEventName.getText();
+								if (status != null && status != "") {
+									Event newEvent = new Event();
+									newEvent.setName(tfEventName.getText());
+									newEvent.setStartDay(day);
+									newEvent.setStartMonth(monthToday + 1);
+									newEvent.setStartYear(yearToday);
+									newEvent.setEndDay(day);
+									newEvent.setEndMonth(monthToday + 1);
+									newEvent.setEndYear(yearToday);
+									newEvent.setColor(lblColor.getBackground());
+									eventList.add(newEvent);
+								}
+
+								mainFrame.setEnabled(true);
+								refreshViewEvents(day);
+								frmAdd.dispose();
+							}
+						});
+						cancelAddButton = new JButton("Cancel");
+						cancelAddButton.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								mainFrame.setEnabled(true);
+								refreshViewEvents(day);
+								frmAdd.dispose();
+							}
+						});
+
+
+						panelAdd = new JPanel(null);
+						TitledBorder addTitle = BorderFactory.createTitledBorder("Fill in Event Details in the Fields");
+						addTitle.setTitleJustification(TitledBorder.CENTER);
+						panelAdd.setBorder(addTitle);
+
+						paneAdd.add(panelAdd);
+						panelAdd.add(continueAddButton);
+						panelAdd.add(cancelAddButton);
+						panelAdd.add(lblEventName);
+						panelAdd.add(tfEventName);
+						panelAdd.add(lblSelectColor);
+						panelAdd.add(lblColor);
+						panelAdd.add(selectColorButton);
+
+						panelAdd.setBounds(5, 5, 275, 290);
+						continueAddButton.setBounds(58, 250, 75, 25);
+						cancelAddButton.setBounds(140, 250, 75, 25);
+						lblEventName.setBounds(12, 30, 75, 25);
+						tfEventName.setBounds(12, 55, 250, 25);
+						lblSelectColor.setBounds(12, 100, 75, 25);
+						lblColor.setBounds(80, 100, 25, 25);
+						selectColorButton.setBounds(120, 100, 75, 25);
+
+						frmAdd.setLocationRelativeTo(mainFrame);
+						frmAdd.setVisible(true);
+						frmAdd.setResizable(false);
+						refreshViewEvents(day);
+					}
+				});
 				deleteButton = new JButton("Delete");
 
-                modelEventsListTable = new DefaultTableModel();
-                eventsListTable = new JTable (modelEventsListTable);
+
+
+                modelEventsListTable = new DefaultListModel();
+                eventsListTable = new JList (modelEventsListTable);
                 scrollList = new JScrollPane(eventsListTable);
+
 
                 mainPanel = new JPanel(null);
                 TitledBorder title = BorderFactory.createTitledBorder("Events on This Day");
@@ -286,22 +393,34 @@ public class CalendarProgram{
 
                 mainPanel.setBounds(10, 10, 465, 495);
                 addButton.setBounds(203, 430, 55,25);
-				scrollList.setBounds(132, 60, 200,340);
+				scrollList.setBounds(82, 60, 300,340);
 
 
                 mainFrame.setLocationRelativeTo(frmMain);
                 mainFrame.setVisible(true);
                 mainFrame.setResizable(false);
 
-				eventsListTable.setColumnSelectionAllowed(true);
-				eventsListTable.setRowSelectionAllowed(true);
-				eventsListTable.setTableHeader(null);
-				eventsListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-				eventsListTable.setRowHeight(20);
-				modelEventsListTable.setColumnCount(1);
-				modelEventsListTable.setRowCount(10);
-				eventsListTable.setDefaultRenderer(eventsListTable.getColumnClass(0), new ListRenderer());
+				eventsListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+				refreshViewEvents(day);
             }
+
+            public void refreshViewEvents(int day){
+				ArrayList<Event> eventsToday = new ArrayList<>();
+
+				for (int i = 0; i < eventList.size(); i++) {
+					Event e = eventList.get(i);
+					if (e.getStartDay() == day && e.getStartYear() == yearToday && e.getStartMonth() == monthToday)
+						eventsToday.add(e);
+				}
+
+				modelEventsListTable.removeAllElements();
+
+				for (int i = 0; i < eventsToday.size(); i++){
+					modelEventsListTable.addElement(eventsToday.get(i));
+				}
+
+				eventsListTable.setCellRenderer(new ListRenderer());
+			}
     }
 }
