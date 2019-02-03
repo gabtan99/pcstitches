@@ -16,7 +16,6 @@ public class Event implements EventsInterface {
         setStartMinute(0);
         setEndHour(23);
         setEndMinute(59);
-        eventColor = Color.black;
     }
 
     // Getters
