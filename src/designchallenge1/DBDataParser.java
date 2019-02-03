@@ -1,5 +1,7 @@
 package designchallenge1;
 
+import java.awt.*;
+import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -14,23 +16,51 @@ public class DBDataParser extends DataParser {
 	private static Statement stmt;
 
 	ArrayList<Event> readData() {
-		return new ArrayList<Event>();
+
+		String returnAllEvents = "SELECT * FROM myevents";
+
+		ArrayList<Event> temp = new ArrayList<Event>();
+
+		connectDB();
+
+		try {
+			ResultSet rs = stmt.executeQuery(returnAllEvents);
+
+			while (rs.next()) {
+				Event e = new Event();
+
+				e.setName(rs.getString("name"));
+				e.setStartMonth(rs.getInt("start_month"));
+				e.setStartDay(rs.getInt("start_day"));
+				e.setStartYear(rs.getInt("start_year"));
+				e.setEndMonth(rs.getInt("end_month"));
+				e.setEndDay(rs.getInt("end_day"));
+				e.setEndYear(rs.getInt("end_year"));
+
+
+				//Color c = (Color) Color.class.getField(eventDetails[2].toUpperCase()).get(null);
+				//e.setColor(c);
+
+				temp.add(e);
+			}
+		} catch (SQLException e) {
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+		}
+		conn = null;
+		return temp;
 	}
 
 	boolean writeData(ArrayList<Event> events) {
 
-		String clearData = "DELETE FROM myevents WHERE event_id > 0";
+		connectDB();
 
-		//Connects to DB
+		String clearData = "DELETE FROM myevents WHERE event_id > 0";
 		try {
-			Class.forName(driver);
-			conn = DriverManager.getConnection(url, user, pass);
-			System.out.println("Connected to database : " + db);
-			stmt = conn.createStatement();
 			stmt.executeUpdate(clearData);
-		} catch (Exception e) {
-			System.err.println("Got an exception! ");
-			System.err.println(e.getMessage());
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 
 		for (int i=0; i<events.size(); i++) {
@@ -43,6 +73,7 @@ public class DBDataParser extends DataParser {
 					+"', '"+ events.get(i).getEndMinute() +"', '"+ events.get(i).getColorRGB() +"')";
 
 			try {
+
 				addEvent = conn.prepareStatement(insertEvent);
 				addEvent.setString(1, events.get(i).getName());
 				addEvent.executeUpdate();
@@ -52,16 +83,11 @@ public class DBDataParser extends DataParser {
 				System.out.println("VendorError: " + e.getErrorCode());
 				return false;
 			} finally {
-				if (addEvent != null) {
-					try {
-						addEvent.close();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-				}
+				try { addEvent.close(); } catch (Exception e) { /* ignored */ }
 			}
 		}
 		System.out.println("File saved to database: " + db);
+		conn = null;
 		return true;
 	}
 
@@ -85,4 +111,19 @@ public class DBDataParser extends DataParser {
 
 		return newID;
 	}
+
+	void connectDB () {
+
+		//Connects to DB
+		try {
+			Class.forName(driver);
+			conn = DriverManager.getConnection(url, user, pass);
+			System.out.println("Connected to database : " + db);
+			stmt = conn.createStatement();
+		} catch (Exception e) {
+			System.err.println("Got an exception! ");
+			System.err.println(e.getMessage());
+		}
+	}
+
 }

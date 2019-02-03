@@ -24,8 +24,8 @@ public class CSVDataParser extends DataParser {
 				String[] eventDetails = line.split(COMMA_DELIMITER, 3);
 
 				Event e = new Event();
-				int[] date = getMonthDayYear(eventDetails[0]);
 
+				int[] date = getMonthDayYear(eventDetails[0]);
 
 				e.setStartMonth(date[0]);
 				e.setStartDay(date[1]);
@@ -35,11 +35,9 @@ public class CSVDataParser extends DataParser {
 				e.setEndDay(date[1]);
 				e.setEndYear(date[2]);
 
-
 				e.setName(eventDetails[1]);
 				Color c = (Color) Color.class.getField(eventDetails[2].toUpperCase()).get(null);
 				e.setColor(c);
-
 
 				temp.add(e);
 			}

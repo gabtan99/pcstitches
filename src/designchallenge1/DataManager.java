@@ -7,11 +7,10 @@ public class DataManager {
     public static void main (String args[])  {
 
         CSVDataParser csvread = new CSVDataParser();
-        ArrayList<Event> temp = csvread.readData();
         PSVDataParser psvread = new PSVDataParser();
         DBDataParser dbsave = new DBDataParser();
 
-        temp.addAll(psvread.readData());
+        ArrayList<Event> temp = csvread.readData();
 
         csvread.writeData(temp);
         psvread.writeData(temp);
