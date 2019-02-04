@@ -40,3 +40,4 @@ gen
 src/.DS_Store
 IOFiles/*.psv
 IOFiles/*.csv
+.idea/misc.xml

@@ -242,7 +242,7 @@ public class CalendarProgram{
             public JFrame mainFrame;
             public JPanel mainPanel;
             public Container pane;
-            public JButton addButton, deleteButton;
+            public JButton addButton;
             public JScrollPane scrollList;
 
             public DefaultListModel modelEventsListTable;
@@ -575,13 +575,98 @@ public class CalendarProgram{
 						refreshViewEvents(day);
 					}
 				});
-				deleteButton = new JButton("Delete");
 
 
 				// Main Showing of all Events
                 modelEventsListTable = new DefaultListModel();
                 eventsListTable = new JList (modelEventsListTable);
                 scrollList = new JScrollPane(eventsListTable);
+
+
+                eventsListTable.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent mouseEvent) {
+						Event eventSelected = (Event)eventsListTable.getSelectedValue();
+
+						JFrame frmSelect;
+						JPanel pnlSelect;
+						Container pnSelect;
+						JLabel lblStartDate, lblEndDate;
+						JButton deleteButton, cancelButton;
+
+						mainFrame.setEnabled(false);
+
+						frmSelect = new JFrame("Event Info");
+						frmSelect.setSize(350, 150);
+						pnSelect = frmSelect.getContentPane();
+						pnSelect.setLayout(null);
+
+						// Custom Exit on CLose
+						frmSelect.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+						frmSelect.addWindowListener(new WindowAdapter() {
+							@Override
+							public void windowClosing(WindowEvent event) {
+								mainFrame.setEnabled(true);
+								frmSelect.dispose();
+							}
+						});
+
+						String startDateString = "";
+						startDateString = startDateString.concat("From: "+ eventSelected.getStartYear() + "/" + eventSelected.getString( eventSelected.getStartMonth() +1 )+ "/" + eventSelected.getString(eventSelected.getStartDay() )+ " " + eventSelected.getString(eventSelected.getStartHour()) + ":" + eventSelected.getString(eventSelected.getStartMinute()));
+						String endDateString = "";
+						endDateString = endDateString.concat("To:     "+ eventSelected.getEndYear() + "/" + eventSelected.getString( eventSelected.getEndMonth() + 1 ) + "/" +eventSelected.getString( eventSelected.getEndDay()) + " " + eventSelected.getString(eventSelected.getEndHour()) + ":" + eventSelected.getString(eventSelected.getEndMinute()));
+
+						lblStartDate = new JLabel(startDateString);
+						lblEndDate = new JLabel(endDateString);
+
+						deleteButton = new JButton("Delete");
+						deleteButton.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								int input = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this event?", "Delete Event", JOptionPane.YES_NO_OPTION);
+								if (input == 0){
+									mainFrame.setEnabled(true);
+									eventList.remove(eventSelected);
+									refreshViewEvents(day);
+									frmSelect.dispose();
+								}
+							}
+						});
+
+						cancelButton = new JButton("Cancel");
+						cancelButton.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								mainFrame.setEnabled(true);
+								refreshViewEvents(day);
+								frmSelect.dispose();
+							}
+						});
+
+						pnlSelect = new JPanel(null);
+						TitledBorder eventTitle = BorderFactory.createTitledBorder(eventSelected.getName());
+						eventTitle.setTitleJustification(TitledBorder.CENTER);
+						pnlSelect.setBorder(eventTitle);
+
+						pnSelect.add(pnlSelect);
+						pnlSelect.add(lblStartDate);
+						pnlSelect.add(lblEndDate);
+						pnlSelect.add(deleteButton);
+						pnlSelect.add(cancelButton);
+
+						pnlSelect.setBounds(5, 5, 325, 102);
+						lblStartDate.setBounds(100, 17, 130, 25);
+						lblEndDate.setBounds(100, 32, 130, 25);
+						deleteButton.setBounds(90, 65, 75, 25 );
+						cancelButton.setBounds(165, 65, 75, 25 );
+
+						frmSelect.setLocationRelativeTo(mainFrame);
+						frmSelect.setVisible(true);
+						frmSelect.setResizable(false);
+
+					}
+
+				});
 
                 mainPanel = new JPanel(null);
                 TitledBorder title = BorderFactory.createTitledBorder("Events on This Day");

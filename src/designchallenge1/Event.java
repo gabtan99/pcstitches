@@ -126,7 +126,14 @@ public class Event implements EventsInterface {
     }
 
     public String getString(int num) {
-        return Integer.toString(num);
+        String s = "";
+        if (num / 10 < 1){
+            s = s.concat("0");
+            s = s.concat(Integer.toString(num));
+            return s;
+        }else{
+            return Integer.toString(num);
+        }
     }
 }
 
