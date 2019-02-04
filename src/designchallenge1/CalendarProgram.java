@@ -255,7 +255,7 @@ public class CalendarProgram{
                 dateHeader = dateHeader.concat(monthLabel.getText()+ " " + day + ", " + yearToday);
 
                 mainFrame = new JFrame();
-                mainFrame.setSize(500, 550);
+                mainFrame.setSize(400, 480);
                 mainFrame.setTitle(dateHeader);
                 pane = mainFrame.getContentPane();
                 pane.setLayout(null);
@@ -586,86 +586,87 @@ public class CalendarProgram{
                 eventsListTable.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent mouseEvent) {
-						Event eventSelected = (Event)eventsListTable.getSelectedValue();
+						if (eventsListTable.getModel().getSize() != 0) {
+							Event eventSelected = (Event) eventsListTable.getSelectedValue();
 
-						JFrame frmSelect;
-						JPanel pnlSelect;
-						Container pnSelect;
-						JLabel lblStartDate, lblEndDate;
-						JButton deleteButton, cancelButton;
+							JFrame frmSelect;
+							JPanel pnlSelect;
+							Container pnSelect;
+							JLabel lblStartDate, lblEndDate;
+							JButton deleteButton, cancelButton;
 
-						mainFrame.setEnabled(false);
+							mainFrame.setEnabled(false);
 
-						frmSelect = new JFrame("Event Info");
-						frmSelect.setSize(350, 150);
-						pnSelect = frmSelect.getContentPane();
-						pnSelect.setLayout(null);
+							frmSelect = new JFrame("Event Info");
+							frmSelect.setSize(350, 150);
+							pnSelect = frmSelect.getContentPane();
+							pnSelect.setLayout(null);
 
-						// Custom Exit on CLose
-						frmSelect.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-						frmSelect.addWindowListener(new WindowAdapter() {
-							@Override
-							public void windowClosing(WindowEvent event) {
-								mainFrame.setEnabled(true);
-								frmSelect.dispose();
-							}
-						});
-
-						String startDateString = "";
-						startDateString = startDateString.concat("From: "+ eventSelected.getStartYear() + "/" + eventSelected.getString( eventSelected.getStartMonth() +1 )+ "/" + eventSelected.getString(eventSelected.getStartDay() )+ " " + eventSelected.getString(eventSelected.getStartHour()) + ":" + eventSelected.getString(eventSelected.getStartMinute()));
-						String endDateString = "";
-						endDateString = endDateString.concat("To:     "+ eventSelected.getEndYear() + "/" + eventSelected.getString( eventSelected.getEndMonth() + 1 ) + "/" +eventSelected.getString( eventSelected.getEndDay()) + " " + eventSelected.getString(eventSelected.getEndHour()) + ":" + eventSelected.getString(eventSelected.getEndMinute()));
-
-						lblStartDate = new JLabel(startDateString);
-						lblEndDate = new JLabel(endDateString);
-
-						deleteButton = new JButton("Delete");
-						deleteButton.addActionListener(new ActionListener() {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								int input = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this event?", "Delete Event", JOptionPane.YES_NO_OPTION);
-								if (input == 0){
+							// Custom Exit on CLose
+							frmSelect.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+							frmSelect.addWindowListener(new WindowAdapter() {
+								@Override
+								public void windowClosing(WindowEvent event) {
 									mainFrame.setEnabled(true);
-									eventList.remove(eventSelected);
+									frmSelect.dispose();
+								}
+							});
+
+							String startDateString = "";
+							startDateString = startDateString.concat("From: " + eventSelected.getStartYear() + "/" + eventSelected.getString(eventSelected.getStartMonth() + 1) + "/" + eventSelected.getString(eventSelected.getStartDay()) + " " + eventSelected.getString(eventSelected.getStartHour()) + ":" + eventSelected.getString(eventSelected.getStartMinute()));
+							String endDateString = "";
+							endDateString = endDateString.concat("To:     " + eventSelected.getEndYear() + "/" + eventSelected.getString(eventSelected.getEndMonth() + 1) + "/" + eventSelected.getString(eventSelected.getEndDay()) + " " + eventSelected.getString(eventSelected.getEndHour()) + ":" + eventSelected.getString(eventSelected.getEndMinute()));
+
+							lblStartDate = new JLabel(startDateString);
+							lblEndDate = new JLabel(endDateString);
+
+							deleteButton = new JButton("Delete");
+							deleteButton.addActionListener(new ActionListener() {
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									int input = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this event?", "Delete Event", JOptionPane.YES_NO_OPTION);
+									if (input == 0) {
+										mainFrame.setEnabled(true);
+										eventList.remove(eventSelected);
+										refreshViewEvents(day);
+										frmSelect.dispose();
+									}
+								}
+							});
+
+							cancelButton = new JButton("Cancel");
+							cancelButton.addActionListener(new ActionListener() {
+								@Override
+								public void actionPerformed(ActionEvent e) {
+									mainFrame.setEnabled(true);
 									refreshViewEvents(day);
 									frmSelect.dispose();
 								}
-							}
-						});
+							});
 
-						cancelButton = new JButton("Cancel");
-						cancelButton.addActionListener(new ActionListener() {
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								mainFrame.setEnabled(true);
-								refreshViewEvents(day);
-								frmSelect.dispose();
-							}
-						});
+							pnlSelect = new JPanel(null);
+							TitledBorder eventTitle = BorderFactory.createTitledBorder(eventSelected.getName());
+							eventTitle.setTitleJustification(TitledBorder.CENTER);
+							pnlSelect.setBorder(eventTitle);
 
-						pnlSelect = new JPanel(null);
-						TitledBorder eventTitle = BorderFactory.createTitledBorder(eventSelected.getName());
-						eventTitle.setTitleJustification(TitledBorder.CENTER);
-						pnlSelect.setBorder(eventTitle);
+							pnSelect.add(pnlSelect);
+							pnlSelect.add(lblStartDate);
+							pnlSelect.add(lblEndDate);
+							pnlSelect.add(deleteButton);
+							pnlSelect.add(cancelButton);
 
-						pnSelect.add(pnlSelect);
-						pnlSelect.add(lblStartDate);
-						pnlSelect.add(lblEndDate);
-						pnlSelect.add(deleteButton);
-						pnlSelect.add(cancelButton);
+							pnlSelect.setBounds(5, 5, 325, 102);
+							lblStartDate.setBounds(100, 17, 130, 25);
+							lblEndDate.setBounds(100, 32, 130, 25);
+							deleteButton.setBounds(90, 65, 75, 25);
+							cancelButton.setBounds(165, 65, 75, 25);
 
-						pnlSelect.setBounds(5, 5, 325, 102);
-						lblStartDate.setBounds(100, 17, 130, 25);
-						lblEndDate.setBounds(100, 32, 130, 25);
-						deleteButton.setBounds(90, 65, 75, 25 );
-						cancelButton.setBounds(165, 65, 75, 25 );
+							frmSelect.setLocationRelativeTo(mainFrame);
+							frmSelect.setVisible(true);
+							frmSelect.setResizable(false);
 
-						frmSelect.setLocationRelativeTo(mainFrame);
-						frmSelect.setVisible(true);
-						frmSelect.setResizable(false);
-
+						}
 					}
-
 				});
 
                 mainPanel = new JPanel(null);
@@ -678,9 +679,9 @@ public class CalendarProgram{
                 mainPanel.add(scrollList);
 
 
-                mainPanel.setBounds(10, 10, 465, 495);
-                addButton.setBounds(203, 430, 55,25);
-				scrollList.setBounds(82, 60, 300,340);
+                mainPanel.setBounds(10, 10, 365, 425);
+                addButton.setBounds(153, 385, 55,25);
+				scrollList.setBounds(32, 35, 300,340);
 
 
                 mainFrame.setLocationRelativeTo(frmMain);
