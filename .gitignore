@@ -36,6 +36,7 @@ misc.xml
 out
 gen
 .idea/misc.xml
+*.xml
 .idea/misc.xml
 src/.DS_Store
 IOFiles/*.psv
