@@ -7,7 +7,7 @@ package designchallenge1;
 /**
  *
  *
- * @author Arturo III
+ * @author Arturo III ////////////
  */
 
 import javax.swing.*;
