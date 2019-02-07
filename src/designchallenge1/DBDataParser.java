@@ -7,20 +7,15 @@ import java.util.ArrayList;
 
 public class DBDataParser extends DataParser {
 
-	private static String driver = "com.mysql.jdbc.Driver";
-	private static String db = "calendardb";
-	private static String url = "jdbc:mysql://localhost/" + db + "?useSSL=false";
-	private static String user = "root";
-	private static String pass = "password";
 	private static Connection conn = null;
 	private static Statement stmt;
 
-	ArrayList<Event> readData() {
+	ArrayList<Event> readData(String db) {
 
 		String returnAllEvents = "SELECT * FROM myevents";
 		ArrayList<Event> temp = new ArrayList<Event>();
 
-		connectDB();
+		connectDB(db);
 
 		try {
 			ResultSet rs = stmt.executeQuery(returnAllEvents);
@@ -45,14 +40,13 @@ public class DBDataParser extends DataParser {
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
 
-		System.out.println("Data imported from: " + db);
 		conn = null;
 		return temp;
 	}
 
-	boolean writeData(ArrayList<Event> events) {
+	boolean writeData(ArrayList<Event> events, String db) {
 
-		connectDB();
+		connectDB(db);
 
 		String clearData = "DELETE FROM myevents WHERE event_id > 0";
 
@@ -86,7 +80,6 @@ public class DBDataParser extends DataParser {
 			}
 		}
 
-		System.out.println("Data saved to database: " + db);
 		conn = null;
 		return true;
 	}
@@ -112,7 +105,13 @@ public class DBDataParser extends DataParser {
 		return newID;
 	}
 
-	void connectDB () {
+	void connectDB (String dbName) {
+
+		String db = dbName;
+		String driver = "com.mysql.jdbc.Driver";
+		String url = "jdbc:mysql://localhost/" + db + "?useSSL=false";
+		String user = "root";
+		String pass = "password";
 
 		//Connects to DB
 		try {

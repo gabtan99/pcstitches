@@ -19,6 +19,11 @@ import java.awt.event.*;
 import java.util.*;
 
 public class CalendarProgram{
+
+	private static final String CSV_FILE = "IOFiles/Philippine Holidays.csv";
+	private static final String CSV_STORAGE = "IOFiles/My Events.csv";
+	private static final String PSV_FILE = "IOFiles/DLSU Unicalendar.psv";
+	private static final String PSV_STORAGE = "IOFiles/My Events.psv";
 	
         /**** Day Components ****/
 	public int yearBound, monthBound, dayBound, yearToday, monthToday;
@@ -86,9 +91,15 @@ public class CalendarProgram{
 		eventList = new ArrayList<>();
 		defaultList = new ArrayList<>();
 		fileReader = new CSVDataParser();
-		defaultList = fileReader.readData();
+		defaultList = fileReader.readData(CSV_FILE);
+		defaultList.addAll(fileReader.readData(CSV_STORAGE));
 		fileReader = new PSVDataParser();
-		defaultList.addAll(fileReader.readData());
+		defaultList.addAll(fileReader.readData(PSV_FILE));
+
+		for (int i=0; i<defaultList.size(); i++) {
+			defaultList.get(i).getName();
+		}
+
 		eventList.addAll(defaultList);
 		// New Code
 		frmMain = new JFrame ("Calendar Application");
@@ -105,7 +116,7 @@ public class CalendarProgram{
                 public void windowClosing(WindowEvent event) {
 					eventList.removeAll(defaultList);
 					fileReader = new CSVDataParser();
-					fileReader.writeData(eventList);
+					fileReader.writeData(eventList, CSV_STORAGE);
                     frmMain.dispose();
                 }
             });
