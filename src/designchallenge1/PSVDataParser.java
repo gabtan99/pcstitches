@@ -39,10 +39,9 @@ public class PSVDataParser extends DataParser{
 				e.setColor(c);
 
 				temp.add(e);
-				reader.close();
-				System.out.println("Data imported from: " + PSV_FILE);
-			}
 
+			}
+			System.out.println("Data imported from: " + PSV_FILE);
 		} catch (IOException | IllegalArgumentException | IllegalAccessException | NoSuchFieldException
 				| SecurityException e) {
 			e.printStackTrace();
