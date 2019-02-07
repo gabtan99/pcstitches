@@ -123,8 +123,6 @@ public class CalendarProgram{
 					eventList.removeAll(defaultList);
 					fileReader = new CSVDataParser();
 					fileReader.writeData(eventList, CSV_STORAGE);
-					fileReader = new DBDataParser();
-					fileReader.writeData(eventList, DATABASE);
                     frmMain.dispose();
                 }
             });
