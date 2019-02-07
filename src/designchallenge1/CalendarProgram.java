@@ -12,11 +12,13 @@ package designchallenge1;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.*;
-import javax.swing.table.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
 
 public class CalendarProgram{
 
@@ -47,6 +49,7 @@ public class CalendarProgram{
 		public ArrayList<Event> defaultList;
         public DataParser fileReader;
 
+
         public void refreshCalendar(int month, int year)
         {
 		String[] months =  {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
@@ -63,6 +66,8 @@ public class CalendarProgram{
 		monthLabel.setBounds(320-monthLabel.getPreferredSize().width/2, 50, 360, 50);
                 
 		cmbYear.setSelectedItem(""+year);
+
+
 		
 		for (i = 0; i < 6; i++)
 			for (j = 0; j < 7; j++)

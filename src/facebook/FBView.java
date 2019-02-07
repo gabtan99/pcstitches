@@ -1,4 +1,6 @@
-package sms;
+package facebook;
+
+import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -9,16 +11,15 @@ import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyleContext;
-
 import values.AppStrings;
 
-public class SMSView extends JFrame{
+public class FBView extends JFrame{
 	
 	private static int appIDTracker = 0;
-	private final String newLine = "\n********************************\n";
+	private final String newLine = "\n=============================\n";
 	
 	private int appID;
-	private int smsNo;
+	private int eventNo;
 	
 	protected JButton btnClear = null;
 	protected JTextPane paneFeed = null;
@@ -26,9 +27,9 @@ public class SMSView extends JFrame{
 	protected StyleContext sc = null;
 	protected DefaultStyledDocument doc = null;
 	
-	public SMSView() {				
+	public FBView() {				
 		appID = ++appIDTracker;
-		smsNo = 0;
+		eventNo = 0;
 		
 		setTitle("Facebook App #" + appID);
 		
@@ -56,18 +57,20 @@ public class SMSView extends JFrame{
 	    getContentPane().add(new JScrollPane(paneFeed));
 	}
 	
-	public void sendSMS(SMS newSMS) {
-		if(smsNo == 0)
+	public void showNewEvent(String newEvent, int month, int day, int year, Color eventColor) {
+		if(eventNo == 0)
 			paneFeed.setText("");
 		
-		smsNo++;
-	    Style smsStyle = sc.addStyle("SMS"+smsNo, null);
-	    smsStyle.addAttribute(StyleConstants.Foreground, newSMS.getColor());
-	    smsStyle.addAttribute(StyleConstants.FontSize, new Integer(16));
-	    smsStyle.addAttribute(StyleConstants.FontFamily, "serif");
+		eventNo++;
+	    Style eventStyle = sc.addStyle("Event"+eventNo, null);
+	    eventStyle.addAttribute(StyleConstants.Foreground, eventColor);
+	    eventStyle.addAttribute(StyleConstants.FontSize, new Integer(16));
+	    eventStyle.addAttribute(StyleConstants.FontFamily, "serif");
 	    
+	    String eventFormat = newEvent + "\n" + month + "/" + day + "/" + year;
+		
 		try {
-			doc.insertString(doc.getLength(), newSMS.toString()+newLine, smsStyle);
+			doc.insertString(doc.getLength(), eventFormat+newLine, eventStyle);
 		} catch (BadLocationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
