@@ -38,6 +38,7 @@ public class CalendarProgram{
 
         /**** Events stored in Calendar *****/
         public ArrayList<Event> eventList;
+        public ArrayList<Event> defaultList;
         
         public void refreshCalendar(int month, int year)
         {
@@ -82,11 +83,26 @@ public class CalendarProgram{
 		catch (Exception e) {}
 
 		eventList = new ArrayList<>();
+		defaultList = new ArrayList<>();
 		frmMain = new JFrame ("Calendar Application");
                 frmMain.setSize(660, 750);
 		pane = frmMain.getContentPane();
 		pane.setLayout(null);
 		frmMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		//New Code
+            frmMain.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+            frmMain.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent event) {
+
+                    frmMain.dispose();
+                }
+            });
+
+            // New Code
+
 
 		monthLabel = new JLabel ("January");
 		yearLabel = new JLabel ("Change year:");
