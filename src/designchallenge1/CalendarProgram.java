@@ -100,6 +100,15 @@ public class CalendarProgram{
                         return true;
                     }
                 };
+		// New COde
+		modelCalendarTable = new DefaultTableModel()
+		{
+			public boolean isCellEditable(int rowIndex, int mColIndex)
+			{
+					return false;
+			}
+		};
+		//New Code
                 
 		calendarTable = new JTable(modelCalendarTable);
                 calendarTable.addMouseListener(new MouseAdapter()   
