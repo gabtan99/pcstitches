@@ -38,7 +38,7 @@ public class CalendarProgram{
 
         /**** Events stored in Calendar *****/
         public ArrayList<Event> eventList;
-        public ArrayList<Event> defaultList;
+		public ArrayList<Event> defaultList;
         public DataParser fileReader;
 
         public void refreshCalendar(int month, int year)
@@ -82,14 +82,15 @@ public class CalendarProgram{
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 }
 		catch (Exception e) {}
-
+		// New Code
 		eventList = new ArrayList<>();
 		defaultList = new ArrayList<>();
-            fileReader = new CSVDataParser();
-            eventList = fileReader.readData();
-
-            fileReader = new PSVDataParser();
-            eventList.addAll(fileReader.readData());
+		fileReader = new CSVDataParser();
+		defaultList = fileReader.readData();
+		fileReader = new PSVDataParser();
+		defaultList.addAll(fileReader.readData());
+		eventList.addAll(defaultList);
+		// New Code
 		frmMain = new JFrame ("Calendar Application");
                 frmMain.setSize(660, 750);
 		pane = frmMain.getContentPane();
@@ -102,7 +103,7 @@ public class CalendarProgram{
             frmMain.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent event) {
-
+					eventList.removeAll(defaultList);
                     frmMain.dispose();
                 }
             });
