@@ -104,6 +104,8 @@ public class CalendarProgram{
                 @Override
                 public void windowClosing(WindowEvent event) {
 					eventList.removeAll(defaultList);
+					fileReader = new CSVDataParser();
+					fileReader.writeData(eventList);
                     frmMain.dispose();
                 }
             });
