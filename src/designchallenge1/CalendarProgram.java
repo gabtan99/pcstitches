@@ -24,6 +24,7 @@ public class CalendarProgram{
 	private static final String CSV_STORAGE = "IOFiles/My Events.csv";
 	private static final String PSV_FILE = "IOFiles/DLSU Unicalendar.psv";
 	private static final String PSV_STORAGE = "IOFiles/My Events.psv";
+	private static final String DATABASE = "calendardb";
 	
         /**** Day Components ****/
 	public int yearBound, monthBound, dayBound, yearToday, monthToday;
@@ -117,6 +118,8 @@ public class CalendarProgram{
 					eventList.removeAll(defaultList);
 					fileReader = new CSVDataParser();
 					fileReader.writeData(eventList, CSV_STORAGE);
+					fileReader = new DBDataParser();
+					fileReader.writeData(eventList, DATABASE);
                     frmMain.dispose();
                 }
             });
