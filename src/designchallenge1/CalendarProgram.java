@@ -106,6 +106,7 @@ public class CalendarProgram{
 			defaultList.get(i).getName();
 		}
 
+
 		eventList.addAll(defaultList);
 		// New Code
 		frmMain = new JFrame ("Calendar Application");
