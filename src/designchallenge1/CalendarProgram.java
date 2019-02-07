@@ -96,18 +96,15 @@ public class CalendarProgram{
 		// New Code
 		eventList = new ArrayList<>();
 		defaultList = new ArrayList<>();
+
 		fileReader = new CSVDataParser();
 		defaultList = fileReader.readData(CSV_FILE);
-		defaultList.addAll(fileReader.readData(CSV_STORAGE));
+		eventList.addAll(fileReader.readData(CSV_STORAGE));
+
 		fileReader = new PSVDataParser();
 		defaultList.addAll(fileReader.readData(PSV_FILE));
-
-		for (int i=0; i<defaultList.size(); i++) {
-			defaultList.get(i).getName();
-		}
-
-
 		eventList.addAll(defaultList);
+		
 		// New Code
 		frmMain = new JFrame ("Calendar Application");
                 frmMain.setSize(660, 750);
