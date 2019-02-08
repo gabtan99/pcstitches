@@ -41,13 +41,9 @@ public class CSVDataParser extends DataParser {
 				}
 
 				else {
-
-					System.out.println("hi");
 					Event e = new Event();
 
 					e.setName(eventDetails[0]);
-
-					System.out.println(eventDetails[0]);
 
 					int n = Integer.parseInt(eventDetails[1]);
 					e.setStartMonth(n);

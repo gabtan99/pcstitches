@@ -21,12 +21,6 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 public class CalendarProgram{
-
-	private static final String CSV_FILE = "IOFiles/Philippine Holidays.csv";
-	private static final String CSV_STORAGE = "IOFiles/My Events.csv";
-	private static final String PSV_FILE = "IOFiles/DLSU Unicalendar.psv";
-	private static final String PSV_STORAGE = "IOFiles/My Events.psv";
-	private static final String DATABASE = "calendardb";
 	
         /**** Day Components ****/
 	public int yearBound, monthBound, dayBound, yearToday, monthToday;
@@ -46,9 +40,7 @@ public class CalendarProgram{
 
         /**** Events stored in Calendar *****/
         public ArrayList<Event> eventList;
-		public ArrayList<Event> defaultList;
-        public DataParser fileReader;
-
+		private DataManager manager;
 
         public void refreshCalendar(int month, int year)
         {
@@ -94,19 +86,9 @@ public class CalendarProgram{
                 }
 		catch (Exception e) {}
 		// New Code
-		eventList = new ArrayList<>();
-		defaultList = new ArrayList<>();
-		fileReader = new CSVDataParser();
-		defaultList = fileReader.readData(CSV_FILE);
-		defaultList.addAll(fileReader.readData(CSV_STORAGE));
-		fileReader = new PSVDataParser();
-		defaultList.addAll(fileReader.readData(PSV_FILE));
+		manager = new DataManagerAdapter();
+		eventList = manager.get_events();
 
-		for (int i=0; i<defaultList.size(); i++) {
-			defaultList.get(i).getName();
-		}
-
-		eventList.addAll(defaultList);
 		// New Code
 		frmMain = new JFrame ("Calendar Application");
                 frmMain.setSize(660, 750);
@@ -120,10 +102,8 @@ public class CalendarProgram{
             frmMain.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent event) {
-					eventList.removeAll(defaultList);
-					fileReader = new CSVDataParser();
-					fileReader.writeData(eventList, CSV_STORAGE);
-                    frmMain.dispose();
+                	manager.save_events(eventList);
+                	frmMain.dispose();
                 }
             });
 
