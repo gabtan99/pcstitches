@@ -3,7 +3,7 @@ package designchallenge1;
 import java.awt.*;
 import java.util.Calendar;
 
-public class Event implements EventsInterface {
+public class Event {
     private String eventName;
     private Color eventColor;
     private Calendar startDate, endDate;
