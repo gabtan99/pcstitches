@@ -78,6 +78,18 @@ public class CalendarProgram{
 
 		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer());
 	}
+
+	public ArrayList<Event> getEventsThisDay(int year, int month, int day){
+		ArrayList<Event> eventsToday = new ArrayList<>();
+
+		for (int i = 0; i < eventList.size(); i++) {
+			Event e = eventList.get(i);
+			if (e.getStartDay() == day && e.getStartYear() == year && e.getStartMonth() == month)
+				eventsToday.add(e);
+		}
+
+		return eventsToday;
+	}
         
 	public CalendarProgram()
         {
@@ -726,13 +738,7 @@ public class CalendarProgram{
 
             // Refreshing the list of events upon adding or not
             public void refreshViewEvents(int day){
-				ArrayList<Event> eventsToday = new ArrayList<>();
-
-				for (int i = 0; i < eventList.size(); i++) {
-					Event e = eventList.get(i);
-					if (e.getStartDay() == day && e.getStartYear() == yearToday && e.getStartMonth() == monthToday)
-						eventsToday.add(e);
-				}
+				ArrayList<Event> eventsToday = getEventsThisDay(yearToday, monthToday, day);
 
 				modelEventsListTable.removeAllElements();
 
