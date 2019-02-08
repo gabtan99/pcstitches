@@ -74,11 +74,22 @@ public class CalendarProgram{
 			int row = new Integer((i+som-2)/7);
 			int column  =  (i+som-2)%7;
 			modelCalendarTable.setValueAt(i, row, column);
+			// New Code
+			ArrayList<Event> eventsThisDay = getEventsThisDay(year, month, i);
+			if (eventsThisDay.size() < 1){
+				modelCalendarTable.setValueAt(i, row, column);
+			}
+			else {
+				String info = i + "  [" + eventsThisDay.size() + " Events]";
+				modelCalendarTable.setValueAt(info, row, column);
+			}
+			// New Code
 		}
 
 		calendarTable.setDefaultRenderer(calendarTable.getColumnClass(0), new TableRenderer());
 	}
 
+	// VVVVVVVVVVVVVVV New Code
 	public ArrayList<Event> getEventsThisDay(int year, int month, int day){
 		ArrayList<Event> eventsToday = new ArrayList<>();
 
@@ -90,6 +101,7 @@ public class CalendarProgram{
 
 		return eventsToday;
 	}
+	// ^^^^^^^^^^^^^^^ New Code
         
 	public CalendarProgram()
         {
@@ -97,29 +109,29 @@ public class CalendarProgram{
                     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
                 }
 		catch (Exception e) {}
-		// New Code
+
+		// vvvvvvvvvv  New Code
 		manager = new DataManagerAdapter();
 		eventList = manager.get_events();
+		// ^^^^^^^^^New Code
 
-		// New Code
 		frmMain = new JFrame ("Calendar Application");
-                frmMain.setSize(660, 750);
+        frmMain.setSize(660, 750);
 		pane = frmMain.getContentPane();
 		pane.setLayout(null);
 		frmMain.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		//New Code
-            frmMain.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frmMain.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-            frmMain.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent event) {
-                	manager.save_events(eventList);
-                	frmMain.dispose();
-                }
-            });
-
-            // New Code
+        frmMain.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent event) {
+                manager.save_events(eventList);
+                frmMain.dispose();
+            }
+        });
+        // New Code
 
 
 		monthLabel = new JLabel ("January");
@@ -307,6 +319,7 @@ public class CalendarProgram{
                 mainFrame.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosing(WindowEvent event) {
+                    	refreshCalendar(monthToday, yearToday);
                         frmMain.setEnabled(true);
                         mainFrame.dispose();
                     }
