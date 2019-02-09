@@ -32,6 +32,7 @@ public class SMSViewObserver extends ViewObserver {
                 SMS text = new SMS(name, date, color);
 
                 view.sendSMS(text);
+                view.setTitle("SMS App #: ");
             }
         }
     }
