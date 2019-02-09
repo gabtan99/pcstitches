@@ -10,7 +10,6 @@ public class FBViewObserver extends ViewObserver{
 
     public FBViewObserver (EventSubject s){
         this.subject = s;
-        this.subject.attach(this);
     }
 
     @Override
@@ -20,8 +19,8 @@ public class FBViewObserver extends ViewObserver{
             view = new FBView();
             for (Event e: events){
                 String name = e.getName();
-                int month = e.getStartMonth();
-                int day = e.getStartMonth();
+                int month = e.getStartMonth() + 1;
+                int day = e.getStartDay();
                 int year = e.getStartYear();
                 Color color = e.getColor();
                 view.showNewEvent(name, month, day, year, color);

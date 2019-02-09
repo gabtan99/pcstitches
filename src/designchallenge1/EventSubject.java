@@ -19,7 +19,7 @@ public class EventSubject {
         VOs.add(vo);
     }
 
-    public void notifyObservers(){
+    private void notifyObservers(){
         for(ViewObserver vo: VOs)
             vo.update();
     }

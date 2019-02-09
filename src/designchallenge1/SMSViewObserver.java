@@ -12,7 +12,6 @@ public class SMSViewObserver extends ViewObserver {
 
     public SMSViewObserver (EventSubject s){
         this.subject = s;
-        this.subject.attach(this);
     }
 
     @Override
