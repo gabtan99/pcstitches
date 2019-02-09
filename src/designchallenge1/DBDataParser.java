@@ -1,7 +1,6 @@
 package designchallenge1;
 
 import java.awt.*;
-import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -9,17 +8,28 @@ public class DBDataParser extends DataParser {
 
 	private static Connection conn = null;
 	private static Statement stmt;
+	private ResultSet rs;
 
-	ArrayList<Event> readData(String db) {
+	void readData(String db) {
 
 		String returnAllEvents = "SELECT * FROM myevents";
-		ArrayList<Event> temp = new ArrayList<Event>();
-
 		connectDB(db);
 
 		try {
-			ResultSet rs = stmt.executeQuery(returnAllEvents);
+			rs = stmt.executeQuery(returnAllEvents);
+		} catch (SQLException e) {
+			System.out.println("SQLException: " + e.getMessage());
+			System.out.println("SQLState: " + e.getSQLState());
+			System.out.println("VendorError: " + e.getErrorCode());
+		}
+		conn = null;
+	}
 
+	ArrayList<Event> processData () {
+
+		ArrayList<Event> temp = new ArrayList<Event>();
+
+		try {
 			while (rs.next()) {
 				Event e = new Event();
 
@@ -30,7 +40,7 @@ public class DBDataParser extends DataParser {
 				e.setEndMonth(rs.getInt("end_month"));
 				e.setEndDay(rs.getInt("end_day"));
 				e.setEndYear(rs.getInt("end_year"));
-				e.setColor(new Color (rs.getInt("rgbid")));
+				e.setColor(new Color(rs.getInt("rgbid")));
 
 				temp.add(e);
 			}
@@ -39,8 +49,6 @@ public class DBDataParser extends DataParser {
 			System.out.println("SQLState: " + e.getSQLState());
 			System.out.println("VendorError: " + e.getErrorCode());
 		}
-
-		conn = null;
 		return temp;
 	}
 

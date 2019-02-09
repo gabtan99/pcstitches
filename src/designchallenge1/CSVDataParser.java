@@ -8,86 +8,95 @@ public class CSVDataParser extends DataParser {
 
 	private static final String COMMA_DELIMITER = "\\, ";
 	private static final String SLASH_DELIMITER = "\\/";
+	private ArrayList<String[]> rawData;
 
-	ArrayList<Event> readData(String readURL) {
-
-
-
-		ArrayList<Event> temp = new ArrayList<Event>();
+	void readData(String readURL) {
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(new File(readURL)))) {
 			String line;
+			rawData = new ArrayList<String[]>();
 			while ((line = reader.readLine()) != null) {
-
 				String[] eventDetails = line.split(COMMA_DELIMITER);
-
-				if (eventDetails.length == 3) {
-					Event e = new Event();
-					int[] date = getMonthDayYear(eventDetails[0]);
-
-					e.setStartMonth(date[0]);
-					e.setStartDay(date[1]);
-					e.setStartYear(date[2]);
-
-					e.setEndMonth(date[0]);
-					e.setEndDay(date[1]);
-					e.setEndYear(date[2]);
-
-					e.setName(eventDetails[1]);
-					Color c = (Color) Color.class.getField(eventDetails[2].toUpperCase()).get(null);
-					e.setColor(c);
-
-					temp.add(e);
-				}
-
-				else {
-					Event e = new Event();
-
-					e.setName(eventDetails[0]);
-
-					int n = Integer.parseInt(eventDetails[1]);
-					e.setStartMonth(n);
-
-					n = Integer.parseInt(eventDetails[2]);
-					e.setStartDay(n);
-
-					n = Integer.parseInt(eventDetails[3]);
-					e.setStartYear(n);
-
-					n = Integer.parseInt(eventDetails[4]);
-					e.setStartHour(n);
-
-					n = Integer.parseInt(eventDetails[5]);
-					e.setStartMinute(n);
-
-					n = Integer.parseInt(eventDetails[6]);
-					e.setEndMonth(n);
-
-					n = Integer.parseInt(eventDetails[7]);
-					e.setEndDay(n);
-
-					n = Integer.parseInt(eventDetails[8]);
-					e.setEndYear(n);
-
-					n = Integer.parseInt(eventDetails[9]);
-					e.setEndHour(n);
-
-					n = Integer.parseInt(eventDetails[10]);
-					e.setEndMinute(n);
-
-					n = Integer.parseInt(eventDetails[11]);
-					Color c = new Color(n);
-					e.setColor(c);
-
-					temp.add(e);
-				}
-
+				rawData.add(eventDetails);
 			}
 
-		} catch (IOException | IllegalArgumentException | IllegalAccessException | NoSuchFieldException
-				| SecurityException e) {
+		} catch (IOException | IllegalArgumentException | SecurityException e) {
 			e.printStackTrace();
 		}
+	}
+
+	ArrayList<Event> processData() {
+
+		ArrayList<Event> temp = new ArrayList<Event>();
+
+		for (String[] rawDatum : rawData) {
+			if (rawDatum.length == 3) {
+				Event e = new Event();
+				int[] date = getMonthDayYear(rawDatum[0]);
+
+				e.setStartMonth(date[0]);
+				e.setStartDay(date[1]);
+				e.setStartYear(date[2]);
+
+				e.setEndMonth(date[0]);
+				e.setEndDay(date[1]);
+				e.setEndYear(date[2]);
+
+				e.setName(rawDatum[1]);
+				Color c = null;
+				try {
+					c = (Color) Color.class.getField(rawDatum[2].toUpperCase()).get(null);
+				} catch (IllegalAccessException e1) {
+					e1.printStackTrace();
+				} catch (NoSuchFieldException e1) {
+					e1.printStackTrace();
+				}
+				e.setColor(c);
+
+				temp.add(e);
+			} else {
+				Event e = new Event();
+
+				e.setName(rawDatum[0]);
+
+				int n = Integer.parseInt(rawDatum[1]);
+				e.setStartMonth(n);
+
+				n = Integer.parseInt(rawDatum[2]);
+				e.setStartDay(n);
+
+				n = Integer.parseInt(rawDatum[3]);
+				e.setStartYear(n);
+
+				n = Integer.parseInt(rawDatum[4]);
+				e.setStartHour(n);
+
+				n = Integer.parseInt(rawDatum[5]);
+				e.setStartMinute(n);
+
+				n = Integer.parseInt(rawDatum[6]);
+				e.setEndMonth(n);
+
+				n = Integer.parseInt(rawDatum[7]);
+				e.setEndDay(n);
+
+				n = Integer.parseInt(rawDatum[8]);
+				e.setEndYear(n);
+
+				n = Integer.parseInt(rawDatum[9]);
+				e.setEndHour(n);
+
+				n = Integer.parseInt(rawDatum[10]);
+				e.setEndMinute(n);
+
+				n = Integer.parseInt(rawDatum[11]);
+				Color c = new Color(n);
+				e.setColor(c);
+
+				temp.add(e);
+			}
+		}
+
 		return temp;
 	}
 

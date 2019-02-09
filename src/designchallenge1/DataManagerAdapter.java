@@ -1,8 +1,6 @@
 package designchallenge1;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class DataManagerAdapter implements DataManager{
     private static final String CSV_FILE = "IOFiles/Philippine Holidays.csv";
@@ -20,10 +18,10 @@ public class DataManagerAdapter implements DataManager{
         eventList = new ArrayList<>();
         defaultList = new ArrayList<>();
         fileReader = new CSVDataParser();
-        defaultList = fileReader.readData(CSV_FILE);
-        eventList.addAll(fileReader.readData(CSV_STORAGE));
+        defaultList = fileReader.readFromLocation(CSV_FILE);
+        eventList.addAll(fileReader.readFromLocation(CSV_STORAGE));
         fileReader = new PSVDataParser();
-        defaultList.addAll(fileReader.readData(PSV_FILE));
+        defaultList.addAll(fileReader.readFromLocation(PSV_FILE));
         eventList.addAll(defaultList);
         return eventList;
     }
@@ -32,6 +30,6 @@ public class DataManagerAdapter implements DataManager{
     public boolean save_events(ArrayList<Event> events_to_save) {
         events_to_save.removeAll(defaultList);
         fileReader = new CSVDataParser();
-        return fileReader.writeData(events_to_save, CSV_STORAGE);
+        return fileReader.saveToLocation(events_to_save, CSV_STORAGE);
     }
 }
