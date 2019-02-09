@@ -18,6 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class CalendarProgram{
@@ -114,6 +115,18 @@ public class CalendarProgram{
 		manager = new DataManagerAdapter();
 		eventList = manager.get_events();
 		// ^^^^^^^^^New Code
+
+		// Vvvvvvvvvvvvvvv new Code
+		EventSubject ES = new EventSubject();
+		ES.attach(new FBViewObserver(ES));
+		ES.attach(new SMSViewObserver(ES));
+		Calendar today = Calendar.getInstance();
+		int y = today.get(Calendar.YEAR);
+		int m = today.get(Calendar.MONTH);
+		int d = today.get(Calendar.DAY_OF_MONTH);
+		ES.setEvents(getEventsThisDay(y,m,d));
+
+		// ^^^^^^^^^^^^^^^ New Code
 
 		frmMain = new JFrame ("Calendar Application");
         frmMain.setSize(660, 750);
