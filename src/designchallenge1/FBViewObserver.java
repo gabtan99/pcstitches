@@ -10,6 +10,7 @@ public class FBViewObserver extends ViewObserver{
 
     public FBViewObserver (EventSubject s){
         this.subject = s;
+        this.subject.attach(this);
     }
 
     @Override

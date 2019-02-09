@@ -118,8 +118,8 @@ public class CalendarProgram{
 
 		// Vvvvvvvvvvvvvvv new Code
 		EventSubject ES = new EventSubject();
-		ES.attach(new FBViewObserver(ES));
-		ES.attach(new SMSViewObserver(ES));
+		FBViewObserver FB = new FBViewObserver(ES);
+		SMSViewObserver SMS = new SMSViewObserver(ES);
 		Calendar today = Calendar.getInstance();
 		int y = today.get(Calendar.YEAR);
 		int m = today.get(Calendar.MONTH);
