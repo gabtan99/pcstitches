@@ -31,7 +31,10 @@ public class SMSViewObserver extends ViewObserver {
                 SMS text = new SMS(name, date, color);
 
                 view.sendSMS(text);
-                view.setTitle("SMS App #: ");
+                String number = view.getTitle();
+                String regex = "\\D";
+                number  = number.replaceAll(regex, "");
+                view.setTitle("SMS App #" + number);
             }
         }
     }
