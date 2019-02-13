@@ -193,7 +193,9 @@ public class CalendarProgram{
 								found = true;
 						}
                         day--;
-						ViewEvents popup = new ViewEvents(day);
+						if (found) {
+							ViewEvents popup = new ViewEvents(day);
+						}
 						// NEW CODE--------------------------------------------------------------------
 
 
