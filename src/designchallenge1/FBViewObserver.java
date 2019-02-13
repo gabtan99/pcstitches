@@ -2,7 +2,10 @@ package designchallenge1;
 
 import facebook.FBView;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class FBViewObserver extends ViewObserver{
@@ -26,6 +29,13 @@ public class FBViewObserver extends ViewObserver{
                 Color color = e.getColor();
                 view.showNewEvent(name, month, day, year, color);
             }
+            view.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            view.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent event) {
+                    view.dispose();
+                }
+            });
         }
 
     }

@@ -3,7 +3,10 @@ package designchallenge1;
 import sms.SMS;
 import sms.SMSView;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -37,6 +40,13 @@ public class SMSViewObserver extends ViewObserver {
                 number  = number.replaceAll(regex, "");
                 view.setTitle("SMS App #" + number);
             }
+            view.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            view.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent event) {
+                    view.dispose();
+                }
+            });
         }
     }
 }
