@@ -44,3 +44,5 @@ IOFiles/*.csv
 .idea/misc.xml
 .idea/misc.xml
 .idea/misc.xml
+*.xml
+src/.DS_Store
